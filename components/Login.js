@@ -12,7 +12,7 @@ const Login = () => (
   <View
     style={{
       height: "100%",
-      backgroundColor: "#",
+      backgroundColor: "#a70a2d",
       alignItems: "center",
       justifyContent: "center",
       width: "100%",
@@ -35,10 +35,13 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "bold",
     marginBottom: 20,
+    color: "#fff",
   },
   input: {
     borderWidth: 1,
     borderColor: "#ddd",
+    backgroundColor: "#fff",
+    borderRadius: 10,
     padding: 10,
     marginBottom: 20,
     width: "80%",
