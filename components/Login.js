@@ -1,63 +1,105 @@
 import React from "react";
-import Icon from "react-native-vector-icons/FontAwesome";
+
+import { TextInput } from "react-native";
+import { StatusBar } from "expo-status-bar";
 import {
+  NativeBaseProvider,
+  Box,
+  AspectRatio,
+  Center,
+  VStack,
+  Heading,
+  HStack,
+  Button,
+  FormControl,
+  Link,
   Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-} from "react-native";
+  Input,
+  Image,
+} from "native-base";
 
-const Login = () => (
-  <View
-    style={{
-      height: "100%",
-      backgroundColor: "#a70a2d",
-      alignItems: "center",
-      justifyContent: "center",
-      width: "100%",
-      height: "50%",
-      borderWidth: 5,
-    }}
-  >
-    <Text style={styles.title}>Se connecter</Text>
+const Login = ({ navigation }) => {
+  return (
+    <NativeBaseProvider>
+      <Center w="100%" h="100%" bg="darkBlue.800">
+        <HStack justifyContent="center">
+          <Image source={require("../assets/img/logo.png")} alt="logo" />
+        </HStack>
+        <Box safeArea p="2" py="8" w="90%" maxW="290">
+          <Heading
+            size="lg"
+            fontWeight="800"
+            color="white"
+            _dark={{
+              color: "warmGray.50",
+            }}
+          >
+            BIENVENUE
+          </Heading>
+          <Heading
+            mt="1"
+            _dark={{
+              color: "warmGray.200",
+            }}
+            color="coolGray.600"
+            fontWeight="medium"
+            size="xs"
+          >
+            Connecter-vous pour continuer !
+          </Heading>
 
-    <TextInput style={styles.input} placeholder="Email" />
-    <TextInput style={styles.input} placeholder="Mot de passe" textS />
-    <TouchableOpacity style={styles.button}>
-      <Text style={styles.buttonText}>Se connecter</Text>
-    </TouchableOpacity>
-  </View>
-);
-
-const styles = StyleSheet.create({
-  title: {
-    fontSize: 30,
-    fontWeight: "bold",
-    marginBottom: 20,
-    color: "#fff",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ddd",
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    padding: 10,
-    marginBottom: 20,
-    width: "80%",
-  },
-  button: {
-    backgroundColor: "#1c9ed9",
-    padding: 10,
-    marginTop: 20,
-    width: "50%",
-  },
-  buttonText: {
-    color: "#fff",
-    textAlign: "center",
-    fontSize: 20,
-    borderRadius: 30,
-  },
-});
-
+          <VStack space={3} mt="5">
+            <FormControl>
+              <FormControl.Label>Email ID</FormControl.Label>
+              <Input />
+            </FormControl>
+            <FormControl>
+              <FormControl.Label>Mot de passe</FormControl.Label>
+              <Input type="password" />
+              <Link
+                _text={{
+                  fontSize: "xs",
+                  fontWeight: "500",
+                  color: "indigo.500",
+                }}
+                alignSelf="flex-end"
+                mt="1"
+              >
+                Mot de passe oublié?
+              </Link>
+            </FormControl>
+            <Button mt="2" colorScheme="indigo">
+              Connexion
+            </Button>
+            <HStack mt="6" justifyContent="center">
+              <Text
+                mt="2"
+                fontSize="sm"
+                color="coolGray.600"
+                _dark={{
+                  color: "warmGray.200",
+                }}
+              >
+                Je suis nouveau.
+              </Text>
+              <Button
+                _text={{
+                  color: "indigo.500",
+                  fontWeight: "medium",
+                  fontSize: "sm",
+                }}
+                variant="link"
+                onPress={() => {
+                  navigation.navigate("Signup");
+                }}
+              >
+                M'inscrire
+              </Button>
+            </HStack>
+          </VStack>
+        </Box>
+      </Center>
+    </NativeBaseProvider>
+  );
+};
 export default Login;
