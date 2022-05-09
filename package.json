@@ -19,6 +19,7 @@
     "native-base": "^3.4.4",
     "react": "17.0.1",
     "react-dom": "17.0.1",
+    "react-hook-form": "^7.30.0",
     "react-native": "0.64.3",
     "react-native-form-component": "^2.4.0",
     "react-native-safe-area-context": "3.3.2",

@@ -1,5 +1,7 @@
 import React from "react";
 import { FontAwesome } from "@expo/vector-icons";
+import { TouchableOpacity } from "react-native";
+import { useForm, Controller } from "react-hook-form";
 import {
   NativeBaseProvider,
   Box,
@@ -19,18 +21,18 @@ import {
 
 const Login = ({ navigation }) => {
   const [show, setShow] = React.useState(true);
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+    },
+  });
+  const onSubmit = (data) => console.log(data);
 
-  const handleLogin = () => {
-    if (email === "" || password === "") {
-      <Alert w={100} h={100} status="danger" colorScheme={"infos"}>
-        <Text>Veuillez remplir tous les champs</Text>
-      </Alert>;
-    }
-    console.log("gko");
-    console.log(email);
-  };
   return (
     <NativeBaseProvider>
       <Center w="100%" h="100%" bg="darkBlue.200">
@@ -61,45 +63,69 @@ const Login = ({ navigation }) => {
           </Heading>
 
           <VStack space={3} mt="5">
-            <FormControl>
-              <Input
-                color={"white"}
-                placeholder="Email"
-                onChangeText={(text) => setEmail(text)}
-                InputLeftElement={
-                  <FontAwesome
-                    name="user"
-                    size={20}
-                    style={{ marginLeft: 20 }}
+            <FormControl isRequired>
+              <Controller
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input
+                    color={"white"}
+                    placeholder="Email"
+                    onChangeText={onChange}
+                    value={value}
+                    onBlur={onBlur}
+                    InputLeftElement={
+                      <FontAwesome
+                        name="user"
+                        size={20}
+                        style={{ marginLeft: 20 }}
+                      />
+                    }
                   />
-                }
+                )}
+                name="email"
+                rules={{ required: "Field is required", minLength: 3 }}
+                defaultValue=""
               />
+              <FormControl.ErrorMessage>
+                {errors.email && <Text>This is required.</Text>}
+              </FormControl.ErrorMessage>
             </FormControl>
-            <FormControl>
-              <Input
-                type={show ? "password" : "text"}
-                color={"white"}
-                onChangeText={(text) => setPassword(text)}
-                InputRightElement={
-                  <Button variant="unstyled" onPress={() => setShow(!show)}>
-                    <FontAwesome
-                      OnPress={() => setShow(true)}
-                      name={show ? "eye-slash" : "eye"}
-                      size={25}
-                      style={{ marginRight: 2 }}
-                    />
-                  </Button>
-                }
-                placeholder="Mot de passe"
-                InputLeftElement={
-                  <FontAwesome
-                    name="lock"
-                    size={20}
-                    style={{ marginLeft: 20 }}
+            <FormControl isRequired isInvalid>
+              <Controller
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input
+                    type={show ? "password" : "text"}
+                    color={"white"}
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                    InputRightElement={
+                      <Button variant="unstyled" onPress={() => setShow(!show)}>
+                        <FontAwesome
+                          OnPress={() => setShow(true)}
+                          name={show ? "eye-slash" : "eye"}
+                          size={25}
+                          style={{ marginRight: 2 }}
+                        />
+                      </Button>
+                    }
+                    placeholder="Mot de passe"
+                    InputLeftElement={
+                      <FontAwesome
+                        name="lock"
+                        size={20}
+                        style={{ marginLeft: 20 }}
+                      />
+                    }
                   />
-                }
+                )}
+                name="password"
+                defaultValue=""
               />
-
+              <FormControl.ErrorMessage>
+                {errors.password && <Text>This is required.</Text>}
+              </FormControl.ErrorMessage>
               <Link
                 _text={{
                   fontSize: "xs",
@@ -112,7 +138,11 @@ const Login = ({ navigation }) => {
                 Mot de passe oublié?
               </Link>
             </FormControl>
-            <Button mt="2" colorScheme="indigo" OnPress={handleLogin()}>
+            <Button
+              mt="2"
+              colorScheme="indigo"
+              onPress={handleSubmit(onSubmit)}
+            >
               Connexion
             </Button>
             <HStack mt="6" justifyContent="center">
