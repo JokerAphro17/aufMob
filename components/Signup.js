@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { FontAwesome } from "@expo/vector-icons";
 import {
   NativeBaseProvider,
   Center,
@@ -12,9 +12,10 @@ import {
   HStack,
   Image,
 } from "native-base";
+
 const Signup = () => (
   <NativeBaseProvider>
-    <Center w="100%" h="100%">
+    <Center w="100%" h="90%">
       <HStack justifyContent="center">
         <Image source={require("../assets/img/logo.png")} alt="logo" />
       </HStack>
@@ -42,16 +43,30 @@ const Signup = () => (
         </Heading>
         <VStack space={3} mt="5">
           <FormControl>
-            <FormControl.Label>Email</FormControl.Label>
-            <Input />
+            <Input
+              InputLeftElement={
+                <FontAwesome name="user" size={20} style={{ marginLeft: 20 }} />
+              }
+              placeholder="Email"
+            />
           </FormControl>
           <FormControl>
-            <FormControl.Label>Mot de passe</FormControl.Label>
-            <Input type="password" />
+            <Input
+              type="password"
+              InputLeftElement={
+                <FontAwesome name="lock" size={20} style={{ marginLeft: 20 }} />
+              }
+              placeholder="Mot de passe"
+            />
           </FormControl>
           <FormControl>
-            <FormControl.Label>Confirmer le mot de passe</FormControl.Label>
-            <Input type="password" />
+            <Input
+              type="password"
+              InputLeftElement={
+                <FontAwesome name="lock" size={20} style={{ marginLeft: 20 }} />
+              }
+              placeholder="Retapez votre mot de passe"
+            />
           </FormControl>
           <Button mt="2" colorScheme="indigo">
             Inscription

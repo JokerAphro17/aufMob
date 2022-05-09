@@ -1,7 +1,5 @@
 import React from "react";
-
-import { TextInput } from "react-native";
-import { StatusBar } from "expo-status-bar";
+import { FontAwesome } from "@expo/vector-icons";
 import {
   NativeBaseProvider,
   Box,
@@ -16,12 +14,26 @@ import {
   Text,
   Input,
   Image,
+  Alert,
 } from "native-base";
 
 const Login = ({ navigation }) => {
+  const [show, setShow] = React.useState(true);
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
+  const handleLogin = () => {
+    if (email === "" || password === "") {
+      <Alert w={100} h={100} status="danger" colorScheme={"infos"}>
+        <Text>Veuillez remplir tous les champs</Text>
+      </Alert>;
+    }
+    console.log("gko");
+    console.log(email);
+  };
   return (
     <NativeBaseProvider>
-      <Center w="100%" h="100%" bg="darkBlue.800">
+      <Center w="100%" h="100%" bg="darkBlue.200">
         <HStack justifyContent="center">
           <Image source={require("../assets/img/logo.png")} alt="logo" />
         </HStack>
@@ -50,12 +62,44 @@ const Login = ({ navigation }) => {
 
           <VStack space={3} mt="5">
             <FormControl>
-              <FormControl.Label>Email ID</FormControl.Label>
-              <Input />
+              <Input
+                color={"white"}
+                placeholder="Email"
+                onChangeText={(text) => setEmail(text)}
+                InputLeftElement={
+                  <FontAwesome
+                    name="user"
+                    size={20}
+                    style={{ marginLeft: 20 }}
+                  />
+                }
+              />
             </FormControl>
             <FormControl>
-              <FormControl.Label>Mot de passe</FormControl.Label>
-              <Input type="password" />
+              <Input
+                type={show ? "password" : "text"}
+                color={"white"}
+                onChangeText={(text) => setPassword(text)}
+                InputRightElement={
+                  <Button variant="unstyled" onPress={() => setShow(!show)}>
+                    <FontAwesome
+                      OnPress={() => setShow(true)}
+                      name={show ? "eye-slash" : "eye"}
+                      size={25}
+                      style={{ marginRight: 2 }}
+                    />
+                  </Button>
+                }
+                placeholder="Mot de passe"
+                InputLeftElement={
+                  <FontAwesome
+                    name="lock"
+                    size={20}
+                    style={{ marginLeft: 20 }}
+                  />
+                }
+              />
+
               <Link
                 _text={{
                   fontSize: "xs",
@@ -68,7 +112,7 @@ const Login = ({ navigation }) => {
                 Mot de passe oublié?
               </Link>
             </FormControl>
-            <Button mt="2" colorScheme="indigo">
+            <Button mt="2" colorScheme="indigo" OnPress={handleLogin()}>
               Connexion
             </Button>
             <HStack mt="6" justifyContent="center">
