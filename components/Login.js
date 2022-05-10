@@ -27,11 +27,14 @@ const Login = ({ navigation }) => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      email: "",
+      password: "",
     },
   });
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = (data) => {
+    navigation.navigate("Home");
+    return console.log(data);
+  };
 
   return (
     <NativeBaseProvider>
@@ -83,14 +86,12 @@ const Login = ({ navigation }) => {
                   />
                 )}
                 name="email"
-                rules={{ required: "Field is required", minLength: 3 }}
+                rules={{ required: "Field is required" }}
                 defaultValue=""
               />
-              <FormControl.ErrorMessage>
-                {errors.email && <Text>This is required.</Text>}
-              </FormControl.ErrorMessage>
+              {errors.email && <Text>* Ce champs est obligatoire</Text>}
             </FormControl>
-            <FormControl isRequired isInvalid>
+            <FormControl isRequired>
               <Controller
                 control={control}
                 render={({ field: { onChange, onBlur, value } }) => (
@@ -123,9 +124,6 @@ const Login = ({ navigation }) => {
                 name="password"
                 defaultValue=""
               />
-              <FormControl.ErrorMessage>
-                {errors.password && <Text>This is required.</Text>}
-              </FormControl.ErrorMessage>
               <Link
                 _text={{
                   fontSize: "xs",
