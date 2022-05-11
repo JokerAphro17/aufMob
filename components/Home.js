@@ -1,5 +1,7 @@
 import React from "react";
+import { FontAwesome } from "@expo/vector-icons";
 import { NativeBaseProvider } from "native-base";
+import { ImageBackground } from "react-native";
 import {
   Center,
   HStack,
@@ -17,21 +19,24 @@ import {
 
 const Home = ({ navigation }) => (
   <NativeBaseProvider>
-    <Center w="100%" h="100%" bg="darkBlue.200">
-      <HStack justifyContent="center">
-        <Image source={require("../assets/img/logo.png")} alt="logo" />
-      </HStack>
-      <Box safeArea p="2" py="8" w="90%" maxW="290">
-        <Heading
-          size="lg"
-          fontWeight="800"
-          color="white"
-          _dark={{ color: "warmGray.50" }}
-        >
-          BIENVENUE
-        </Heading>
-      </Box>
-    </Center>
+    <Box bg="primary.800" h="100%">
+      <VStack space={5} alignItems="center">
+        <Box w="80%" h="10%" bg="indigo.300" rounded="md" shadow={3} />
+        <Button w="80%" h="25%" bg="indigo.300" rounded="md" shadow={3}>
+          <ImageBackground
+            source={require("../assets/img/1xbet.png")}
+            style={{ width: "100%", height: "100%" }}
+          >
+            <Heading color="white">
+              <FontAwesome name="money" size={20} />
+              DEPOT 1XBET
+            </Heading>
+          </ImageBackground>
+        </Button>
+        <Button w="80%" h="25%" bg="indigo.500" rounded="md" shadow={3} />
+        <Button w="80%" h="25%" bg="indigo.700" rounded="md" shadow={3} />
+      </VStack>
+    </Box>
   </NativeBaseProvider>
 );
 
