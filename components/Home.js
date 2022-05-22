@@ -39,9 +39,9 @@ const getIcon = (screenName) => {
     case "Depot":
       return "plus";
     case "Retrait":
-      return "hand-holding-dollar";
-    case "Coupon du Jour":
-      return "archive";
+      return "money";
+    case "Coupon du jour":
+      return "scroll";
     case "Comment ça marche ?":
       return "question";
     case "Support technique et assistance":
@@ -156,7 +156,7 @@ function MyDrawer() {
         <Drawer.Screen name="Mon Compte" component={Component} />
         <Drawer.Screen name="Depot" component={Component} />
         <Drawer.Screen name="Retrait" component={Component} />
-        <Drawer.Screen name="Coupon" component={Component} />
+        <Drawer.Screen name="Coupon du jour" component={Component} />
         <Drawer.Screen name="Comment ça marche ?" component={Component} />
         <Drawer.Screen
           name="Support Technique/assistance"
