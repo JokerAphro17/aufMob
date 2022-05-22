@@ -1,10 +1,12 @@
 import * as React from "react";
+import "react-native-gesture-handler";
+import "react-native-reanimated";
 import { NavigationContainer } from "@react-navigation/native";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
 } from "@react-navigation/drawer";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import {
   NativeBaseProvider,
   Button,
@@ -32,17 +34,17 @@ function Component(props) {
 
 const getIcon = (screenName) => {
   switch (screenName) {
-    case "Inbox":
-      return "email";
-    case "Outbox":
-      return "send";
-    case "Favorites":
-      return "heart";
-    case "Archive":
+    case "Mon Compte":
+      return "user";
+    case "Depot":
+      return "plus";
+    case "Retrait":
+      return "hand-holding-dollar";
+    case "Coupon du Jour":
       return "archive";
-    case "Trash":
-      return "trash-can";
-    case "Spam":
+    case "Comment ça marche ?":
+      return "question";
+    case "Support technique et assistance":
       return "alert-circle";
     default:
       return undefined;
@@ -55,10 +57,10 @@ function CustomDrawerContent(props) {
       <VStack space="6" my="2" mx="1">
         <Box px="4">
           <Text bold color="gray.700">
-            Mail
+            Nom du client
           </Text>
           <Text fontSize="14" mt="1" color="gray.500" fontWeight="500">
-            john_doe@gmail.com
+            sonmail@xxx.com / 123456789
           </Text>
         </Box>
         <VStack divider={<Divider />} space="4">
@@ -83,7 +85,7 @@ function CustomDrawerContent(props) {
                       index === props.state.index ? "primary.500" : "gray.500"
                     }
                     size="5"
-                    as={<MaterialCommunityIcons name={getIcon(name)} />}
+                    as={<FontAwesome name={getIcon(name)} />}
                   />
                   <Text
                     fontWeight="500"
@@ -107,7 +109,7 @@ function CustomDrawerContent(props) {
                   <Icon
                     color="gray.500"
                     size="5"
-                    as={<MaterialCommunityIcons name="bookmark" />}
+                    as={<FontAwesome name="bookmark" />}
                   />
                   <Text color="gray.700" fontWeight="500">
                     Family
@@ -119,7 +121,7 @@ function CustomDrawerContent(props) {
                   <Icon
                     color="gray.500"
                     size="5"
-                    as={<MaterialCommunityIcons name="bookmark" />}
+                    as={<FontAwesome name="bookmark" />}
                   />
                   <Text color="gray.700" fontWeight="500">
                     Friends
@@ -131,7 +133,7 @@ function CustomDrawerContent(props) {
                   <Icon
                     color="gray.500"
                     size="5"
-                    as={<MaterialCommunityIcons name="bookmark" />}
+                    as={<FontAwesome name="bookmark" />}
                   />
                   <Text fontWeight="500" color="gray.700">
                     Work
@@ -151,17 +153,20 @@ function MyDrawer() {
       <Drawer.Navigator
         drawerContent={(props) => <CustomDrawerContent {...props} />}
       >
-        <Drawer.Screen name="Inbox" component={Component} />
-        <Drawer.Screen name="Outbox" component={Component} />
-        <Drawer.Screen name="Favorites" component={Component} />
-        <Drawer.Screen name="Archive" component={Component} />
-        <Drawer.Screen name="Trash" component={Component} />
-        <Drawer.Screen name="Spam" component={Component} />
+        <Drawer.Screen name="Mon Compte" component={Component} />
+        <Drawer.Screen name="Depot" component={Component} />
+        <Drawer.Screen name="Retrait" component={Component} />
+        <Drawer.Screen name="Coupon" component={Component} />
+        <Drawer.Screen name="Comment ça marche ?" component={Component} />
+        <Drawer.Screen
+          name="Support Technique/assistance"
+          component={Component}
+        />
       </Drawer.Navigator>
     </Box>
   );
 }
-export default function Example() {
+export default function Home() {
   return (
     <NavigationContainer>
       <NativeBaseProvider>
