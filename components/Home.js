@@ -6,11 +6,12 @@ import {
   createDrawerNavigator,
   DrawerContentScrollView,
 } from "@react-navigation/drawer";
-import { FontAwesome } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 import {
   NativeBaseProvider,
   Button,
   Box,
+  Link,
   HamburgerIcon,
   Pressable,
   Heading,
@@ -21,6 +22,7 @@ import {
   Divider,
   Icon,
 } from "native-base";
+import Test from "./Test";
 const Drawer = createDrawerNavigator();
 function Component(props) {
   return (
@@ -31,6 +33,9 @@ function Component(props) {
     </Center>
   );
 }
+const fbUrl = "https://www.facebook.com/";
+const telegramUrl = "https://t.me/";
+const whatsappUrl = "https://wa.me/";
 
 const getIcon = (screenName) => {
   switch (screenName) {
@@ -39,13 +44,13 @@ const getIcon = (screenName) => {
     case "Depot":
       return "plus";
     case "Retrait":
-      return "money";
+      return "coins";
     case "Coupon du jour":
-      return "scroll";
+      return "receipt";
     case "Comment ça marche ?":
       return "question";
-    case "Support technique et assistance":
-      return "alert-circle";
+    case "Support Technique/assistance":
+      return "headset";
     default:
       return undefined;
   }
@@ -85,7 +90,7 @@ function CustomDrawerContent(props) {
                       index === props.state.index ? "primary.500" : "gray.500"
                     }
                     size="5"
-                    as={<FontAwesome name={getIcon(name)} />}
+                    as={<FontAwesome5 name={getIcon(name)} />}
                   />
                   <Text
                     fontWeight="500"
@@ -101,45 +106,47 @@ function CustomDrawerContent(props) {
           </VStack>
           <VStack space="5">
             <Text fontWeight="500" fontSize="14" px="5" color="gray.500">
-              Labels
+              <Heading fontSize="20">
+                <Text>Rejoignez-nous sur :</Text>
+              </Heading>
             </Text>
             <VStack space="3">
-              <Pressable px="5" py="3">
+              <Link px="5" py="3" href={fbUrl}>
                 <HStack space="7" alignItems="center">
                   <Icon
                     color="gray.500"
                     size="5"
-                    as={<FontAwesome name="bookmark" />}
+                    as={<FontAwesome5 name="facebook" />}
                   />
                   <Text color="gray.700" fontWeight="500">
-                    Family
+                    Facebook
                   </Text>
                 </HStack>
-              </Pressable>
-              <Pressable px="5" py="2">
+              </Link>
+              <Link px="5" py="2" href={whatsappUrl}>
                 <HStack space="7" alignItems="center">
                   <Icon
                     color="gray.500"
                     size="5"
-                    as={<FontAwesome name="bookmark" />}
+                    as={<FontAwesome5 name="whatsapp" />}
                   />
                   <Text color="gray.700" fontWeight="500">
-                    Friends
+                    Whatsapp
                   </Text>
                 </HStack>
-              </Pressable>
-              <Pressable px="5" py="3">
+              </Link>
+              <Link px="5" py="3" href={telegramUrl}>
                 <HStack space="7" alignItems="center">
                   <Icon
                     color="gray.500"
                     size="5"
-                    as={<FontAwesome name="bookmark" />}
+                    as={<FontAwesome5 name="telegram" />}
                   />
                   <Text fontWeight="500" color="gray.700">
-                    Work
+                    Telegram
                   </Text>
                 </HStack>
-              </Pressable>
+              </Link>
             </VStack>
           </VStack>
         </VStack>
@@ -153,7 +160,7 @@ function MyDrawer() {
       <Drawer.Navigator
         drawerContent={(props) => <CustomDrawerContent {...props} />}
       >
-        <Drawer.Screen name="Mon Compte" component={Component} />
+        <Drawer.Screen name="Mon Compte" component={Test} />
         <Drawer.Screen name="Depot" component={Component} />
         <Drawer.Screen name="Retrait" component={Component} />
         <Drawer.Screen name="Coupon du jour" component={Component} />
@@ -168,10 +175,8 @@ function MyDrawer() {
 }
 export default function Home() {
   return (
-    <NavigationContainer>
-      <NativeBaseProvider>
-        <MyDrawer />
-      </NativeBaseProvider>
-    </NavigationContainer>
+    <NativeBaseProvider>
+      <MyDrawer />
+    </NativeBaseProvider>
   );
 }

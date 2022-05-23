@@ -7,7 +7,7 @@ import Home from "./components/Home";
 
 const App = () => (
   <>
-    <Home />
+    <MyStack />
   </>
 );
 
