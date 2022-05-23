@@ -22,7 +22,7 @@ import {
   Divider,
   Icon,
 } from "native-base";
-import Test from "./Test";
+import Test from "../View/Test";
 const Drawer = createDrawerNavigator();
 function Component(props) {
   return (
@@ -173,7 +173,7 @@ function MyDrawer() {
     </Box>
   );
 }
-export default function Home() {
+export default function Drawer() {
   return (
     <NativeBaseProvider>
       <MyDrawer />
