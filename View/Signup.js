@@ -1,4 +1,5 @@
 import React from "react";
+import { useForm, Controller } from "react-hook-form";
 import { FontAwesome } from "@expo/vector-icons";
 import {
   NativeBaseProvider,
@@ -43,29 +44,68 @@ const Signup = () => (
         </Heading>
         <VStack space={3} mt="5">
           <FormControl>
-            <Input
-              InputLeftElement={
-                <FontAwesome name="user" size={20} style={{ marginLeft: 20 }} />
-              }
-              placeholder="Email"
+            <Controller
+              control={control}
+              name="email"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  onChangeText={onChange}
+                  value={value}
+                  onBlur={onBlur}
+                  InputLeftElement={
+                    <FontAwesome
+                      name="user"
+                      size={20}
+                      style={{ marginLeft: 20 }}
+                    />
+                  }
+                  placeholder="Email"
+                />
+              )}
             />
           </FormControl>
           <FormControl>
-            <Input
-              type="password"
-              InputLeftElement={
-                <FontAwesome name="lock" size={20} style={{ marginLeft: 20 }} />
-              }
-              placeholder="Mot de passe"
+            <Controller
+              control={control}
+              name="password"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  type="password"
+                  onChangeText={onChange}
+                  value={value}
+                  onBlur={onBlur}
+                  InputLeftElement={
+                    <FontAwesome
+                      name="lock"
+                      size={20}
+                      style={{ marginLeft: 20 }}
+                    />
+                  }
+                  placeholder="Mot de passe"
+                />
+              )}
             />
           </FormControl>
           <FormControl>
-            <Input
-              type="password"
-              InputLeftElement={
-                <FontAwesome name="lock" size={20} style={{ marginLeft: 20 }} />
-              }
-              placeholder="Retapez votre mot de passe"
+            <Controller
+              control={control}
+              name="passwordConfirm"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Input
+                  type="password"
+                  onChangeText={onChange}
+                  value={value}
+                  onBlur={onBlur}
+                  InputLeftElement={
+                    <FontAwesome
+                      name="lock"
+                      size={20}
+                      style={{ marginLeft: 20 }}
+                    />
+                  }
+                  placeholder="Retapez votre mot de passe"
+                />
+              )}
             />
           </FormControl>
           <Button mt="2" colorScheme="indigo">

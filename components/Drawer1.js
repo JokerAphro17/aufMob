@@ -22,7 +22,7 @@ import {
   Divider,
   Icon,
 } from "native-base";
-import Test from "../View/Test";
+import Compte from "../View/Compte";
 const Drawer = createDrawerNavigator();
 function Component(props) {
   return (
@@ -160,7 +160,7 @@ function MyDrawer() {
       <Drawer.Navigator
         drawerContent={(props) => <CustomDrawerContent {...props} />}
       >
-        <Drawer.Screen name="Mon Compte" component={Test} />
+        <Drawer.Screen name="Mon Compte" component={Compte} />
         <Drawer.Screen name="Depot" component={Component} />
         <Drawer.Screen name="Retrait" component={Component} />
         <Drawer.Screen name="Coupon du jour" component={Component} />
@@ -173,7 +173,7 @@ function MyDrawer() {
     </Box>
   );
 }
-export default function Drawer() {
+export default function Drawer1() {
   return (
     <NativeBaseProvider>
       <MyDrawer />
