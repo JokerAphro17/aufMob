@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { ToastAndroid } from "react-native";
 import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import { FontAwesome } from "@expo/vector-icons";
@@ -14,6 +15,7 @@ import {
   Button,
   HStack,
   Image,
+  useToast,
   Spinner,
   Text,
 } from "native-base";
@@ -27,10 +29,13 @@ const Loader = () => {
     </Center>
   );
 };
+const shwoToast = (message) => {
+  ToastAndroid.show(message, ToastAndroid.SHORT);
+};
 
-const Signup = () => {
+const Signup = ({ navigation }) => {
   const [password, setPassword] = useState("");
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
   const {
     control,
     handleSubmit,
@@ -44,16 +49,23 @@ const Signup = () => {
   const onSubmit = (data) => {
     setLoading(true);
     axios
-      .post("http://192.168.137.153:3000/api/register", data)
+      .post("http://192.168.137.43:3000/api/register", data)
       .then((res) => {
         setLoading(false);
+        const message = "Votre compte a été créé avec succès";
+        shwoToast(message);
+
+        navigation.navigate("Home");
         console.log(res);
       })
       .catch((err) => {
         setLoading(false);
+        const message = "Erreur lors de la création de votre compte";
+        // show a toast
+        shwoToast(message);
+
         console.log(err);
       });
-    console.log(data);
   };
   if (isLoading) {
     return (

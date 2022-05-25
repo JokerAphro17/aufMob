@@ -10,22 +10,31 @@ const Stack = createNativeStackNavigator();
 const MyStack = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        options={{
-          navigationOptions: { headerShown: false, header: null },
-        }}
-      >
+      <Stack.Navigator>
         <Stack.Screen
           name="Login"
           component={Login}
-          options={{ title: "CONNEXION" }}
+          options={{ title: "CONNEXION", headerTitleAlign: "center" }}
         />
         <Stack.Screen
           name="Signup"
           component={Signup}
           options={{ title: "INSCRIPTION" }}
         />
-        <Stack.Screen name="Home" component={Drawer1} />
+        <Stack.Screen
+          name="Home"
+          component={Drawer1}
+          options={{
+            title: "AFRICAN WALLET/1XBET",
+            headerLeft: () => null,
+            headerTitleStyle: {
+              fontWeight: "bold",
+              fontSize: 20,
+            },
+            headerTitleAlign: "center",
+            headerBackVisible: false,
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

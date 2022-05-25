@@ -129,7 +129,7 @@ const Test = ({ params }) => {
             />
           </FormControl>
           <Button colorScheme="indigo" onPress={handleSubmit(onSubmit)}>
-            Connexion
+            Valider les modification
           </Button>
         </VStack>
       </Center>
