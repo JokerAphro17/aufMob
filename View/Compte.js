@@ -50,7 +50,7 @@ const Test = ({ params }) => {
     <NativeBaseProvider>
       <Center>
         <VStack space={2} mt="3" h="85%">
-          <FormControl w="80%" mb="4">
+          <FormControl w="80" mb="4">
             <Controller
               control={control}
               name="nom"
@@ -66,7 +66,7 @@ const Test = ({ params }) => {
             />
           </FormControl>
 
-          <FormControl w="80%" mb="4">
+          <FormControl w="80" mb="4">
             <Controller
               control={control}
               name="prenom"
@@ -82,7 +82,7 @@ const Test = ({ params }) => {
               defaultValue=""
             />
           </FormControl>
-          <FormControl w="80%" mb="4">
+          <FormControl w="80" mb="4">
             <Controller
               control={control}
               name="email"
@@ -97,7 +97,7 @@ const Test = ({ params }) => {
               )}
             />
           </FormControl>
-          <FormControl w="80%" mb="4">
+          <FormControl w="80" mb="4">
             <Controller
               control={control}
               name="telephone"
@@ -112,7 +112,7 @@ const Test = ({ params }) => {
               )}
             />
           </FormControl>
-          <FormControl w="80%" mb="4">
+          <FormControl w="80" mb="4">
             <Controller
               control={control}
               type="date"

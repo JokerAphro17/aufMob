@@ -122,6 +122,7 @@ const Login = ({ navigation }) => {
                 )}
                 name="password"
                 defaultValue=""
+                rules={{ required: "Field is required" }}
               />
               <Link
                 _text={{
