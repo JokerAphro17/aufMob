@@ -19,7 +19,7 @@ const MyStack = () => {
         <Stack.Screen
           name="Signup"
           component={Signup}
-          options={{ title: "INSCRIPTION" }}
+          options={{ title: "INSCRIPTION", headerTitleAlign: "center" }}
         />
         <Stack.Screen
           name="Home"

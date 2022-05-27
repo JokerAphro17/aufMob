@@ -23,6 +23,7 @@ import {
   Icon,
 } from "native-base";
 import Compte from "../View/Compte";
+import CouponJour from "../View/CouponJour";
 const Drawer = createDrawerNavigator();
 function Component(props) {
   return (
@@ -72,6 +73,7 @@ function CustomDrawerContent(props) {
           <VStack space="3">
             {props.state.routeNames.map((name, index) => (
               <Pressable
+                key={index}
                 px="5"
                 py="3"
                 rounded="md"
@@ -163,7 +165,7 @@ function MyDrawer() {
         <Drawer.Screen name="Mon Compte" component={Compte} />
         <Drawer.Screen name="Depot" component={Component} />
         <Drawer.Screen name="Retrait" component={Component} />
-        <Drawer.Screen name="Coupon du jour" component={Component} />
+        <Drawer.Screen name="Coupon du jour" component={CouponJour} />
         <Drawer.Screen name="Comment ça marche ?" component={Component} />
         <Drawer.Screen
           name="Support Technique/assistance"
