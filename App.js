@@ -6,11 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 
 const App = () => (
   <>
-    {/* <MyStack /> */}
-    {/* <CouponJour /> */}
-    <NavigationContainer>
-      <Drawer1 />
-    </NavigationContainer>
+    <MyStack />
   </>
 );
 

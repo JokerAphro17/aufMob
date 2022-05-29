@@ -49,23 +49,26 @@ const Signup = ({ navigation }) => {
   const onSubmit = (data) => {
     setLoading(true);
     axios
-      .post("http://192.168.137.43:3000/api/register", data)
+      .post("http://192.168.137.153:8000/api/login", data)
       .then((res) => {
         setLoading(false);
-        const message = "Votre compte a été créé avec succès";
-        shwoToast(message);
-
-        navigation.navigate("Home");
-        console.log(res);
+        if (res.data.success) {
+          shwoToast(res.data.message);
+          navigation.navigate("Home");
+          console.log(res);
+        } else {
+          shwoToast(res.data.message);
+        }
       })
       .catch((err) => {
         setLoading(false);
-        const message = "Erreur lors de la création de votre compte";
+
         // show a toast
-        shwoToast(message);
+        shwoToast("Erreur!! probleme de connexion");
 
         console.log(err);
       });
+    console.log(data);
   };
   if (isLoading) {
     return (
@@ -106,6 +109,34 @@ const Signup = ({ navigation }) => {
               <FormControl isRequired>
                 <Controller
                   control={control}
+                  name="name"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
+                      onChangeText={onChange}
+                      value={value}
+                      placeholder="Nom"
+                      onBlur={onBlur}
+                      InputLeftElement={
+                        <FontAwesome
+                          name="user"
+                          size={20}
+                          style={{ marginLeft: 20 }}
+                        />
+                      }
+                    />
+                  )}
+                  rules={{
+                    required: "Champs obligatoire",
+                  }}
+                  defaultValue=""
+                />
+                {errors.name && (
+                  <Text style={{ color: "red" }}>{errors.name.message}</Text>
+                )}
+              </FormControl>
+              <FormControl isRequired>
+                <Controller
+                  control={control}
                   name="email"
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Input
@@ -115,7 +146,7 @@ const Signup = ({ navigation }) => {
                       onBlur={onBlur}
                       InputLeftElement={
                         <FontAwesome
-                          name="user"
+                          name="envelope"
                           size={20}
                           style={{ marginLeft: 20 }}
                         />
@@ -177,7 +208,7 @@ const Signup = ({ navigation }) => {
               <FormControl isRequired>
                 <Controller
                   control={control}
-                  name="passwordConfirm"
+                  name="c_password"
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Input
                       type="password"
@@ -202,9 +233,9 @@ const Signup = ({ navigation }) => {
                       "Les mots de passe ne correspondent pas",
                   }}
                 />
-                {errors.passwordConfirm && (
+                {errors.c_password && (
                   <Text style={{ color: "red" }}>
-                    {errors.passwordConfirm.message}
+                    {errors.c_password.message}
                   </Text>
                 )}
               </FormControl>
