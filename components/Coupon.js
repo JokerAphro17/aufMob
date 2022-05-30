@@ -2,7 +2,7 @@ import React from "react";
 import { VStack, Box, Divider, Heading, Text } from "native-base";
 import { ImageBackground } from "react-native";
 
-export default function Coupon({ params }) {
+export default function Coupon(props) {
   return (
     <Box
       borderRadius="20"
@@ -30,20 +30,19 @@ export default function Coupon({ params }) {
           </Box>
           <Box px="4">
             <Text fontSize="20" color={"white"}>
-              Code :<Heading color={"white"}>dfjndf</Heading>
+              Code :<Heading color={"white"}>{props.code}</Heading>
             </Text>
             <Text fontSize="20" color={"white"}>
-              Cote :<Heading color={"white"}>4.43</Heading>
+              Cote :<Heading color={"white"}>{props.cote}</Heading>
             </Text>
             <Text fontSize="20" textAlign={"center"} color={"white"}>
-              Combiné de 8 equipes
+              Combiné de {props.matchs} equipes
             </Text>
           </Box>
           <Box px="4" pb="4" color={"white"}>
             <Text color={"white"}>
               {" "}
-              Pariez avant le :
-              <Text fontWeight={"bold"}>12/12/2020 a 15h35</Text>
+              Pariez avant le :<Text fontWeight={"bold"}>{props.date}</Text>
             </Text>
           </Box>
         </ImageBackground>

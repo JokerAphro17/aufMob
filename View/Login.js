@@ -1,8 +1,10 @@
 import React from "react";
+import Constants from "expo-constants";
 import { FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
 import { useForm, Controller, set } from "react-hook-form";
 import { ToastAndroid } from "react-native";
+import Loader from "../components/Loader";
 import {
   NativeBaseProvider,
   Box,
@@ -23,16 +25,10 @@ import {
 const shwoToast = (message) => {
   ToastAndroid.show(message, ToastAndroid.SHORT);
 };
-const Loader = () => {
-  return (
-    <Center h="80%" w="100%">
-      <HStack space={2} justifyContent="center" h="80">
-        <Spinner accessibilityLabel="Loading posts" size="lg" />
-        <Heading color="primary.500" fontSize="xl"></Heading>
-      </HStack>
-    </Center>
-  );
-};
+const { manifest } = Constants;
+
+const api = `http://${manifest.debuggerHost.split(":")[0]}:3000/api/login`;
+
 const Login = ({ navigation }) => {
   const [isLoading, setLoading] = React.useState(false);
   const [show, setShow] = React.useState(true);
@@ -49,7 +45,7 @@ const Login = ({ navigation }) => {
   const onSubmit = (data) => {
     setLoading(true);
     axios
-      .post("http://192.168.137.153:3000/api/login", data)
+      .post(api, data)
       .then((res) => {
         setLoading(false);
         shwoToast(res.data.msg);
@@ -64,6 +60,7 @@ const Login = ({ navigation }) => {
         console.log(err);
       });
     console.log(data);
+    console.log(api);
   };
   if (isLoading) {
     return (

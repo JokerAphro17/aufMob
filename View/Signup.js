@@ -4,6 +4,10 @@ import { ToastAndroid } from "react-native";
 import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import { FontAwesome } from "@expo/vector-icons";
+import Constants from "expo-constants";
+const { manifest } = Constants;
+const api = `http://${manifest.debuggerHost.split(":")[0]}:3000/api/login`;
+import Loader from "../components/Loader";
 import {
   NativeBaseProvider,
   Center,
@@ -19,19 +23,12 @@ import {
   Spinner,
   Text,
 } from "native-base";
-const Loader = () => {
-  return (
-    <Center h="80%" w="100%">
-      <HStack space={2} justifyContent="center" h="80">
-        <Spinner accessibilityLabel="Loading posts" size="lg" />
-        <Heading color="primary.500" fontSize="xl"></Heading>
-      </HStack>
-    </Center>
-  );
-};
+
 const shwoToast = (message) => {
   ToastAndroid.show(message, ToastAndroid.SHORT);
 };
+
+// github api
 
 const Signup = ({ navigation }) => {
   const [password, setPassword] = useState("");
