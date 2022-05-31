@@ -1,8 +1,8 @@
 import React from "react";
 import { Text, View, Modal, Alert } from "react-native";
 
-const Modale = ({ params }) => (
-  <Modal animationType="slide" transparent={true} visible={true}>
+const Modale = ({ montant, id1xbet, visibility }) => (
+  <Modal animationType="slide" transparent={true} visible={visibility}>
     <View
       style={{
         flex: 1,
@@ -12,7 +12,9 @@ const Modale = ({ params }) => (
       }}
     >
       <View style={{ backgroundColor: "white", padding: 20, borderRadius: 10 }}>
-        <Text>Hello World!</Text>
+        <Text>
+          Confimer vous le dépot de {montant} sur le compte 1xbet {id1xbet} ?
+        </Text>
       </View>
     </View>
   </Modal>

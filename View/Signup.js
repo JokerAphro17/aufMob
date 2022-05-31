@@ -6,7 +6,7 @@ import { useForm, Controller } from "react-hook-form";
 import { FontAwesome } from "@expo/vector-icons";
 import Constants from "expo-constants";
 const { manifest } = Constants;
-const api = `http://${manifest.debuggerHost.split(":")[0]}:3000/api/login`;
+const api = `http://${manifest.debuggerHost.split(":")[0]}:3000/api/register`;
 import Loader from "../components/Loader";
 import {
   NativeBaseProvider,
@@ -46,7 +46,7 @@ const Signup = ({ navigation }) => {
   const onSubmit = (data) => {
     setLoading(true);
     axios
-      .post("http://192.168.137.153:8000/api/login", data)
+      .post("http://192.168.137.153:3000/api/register", data)
       .then((res) => {
         setLoading(false);
         if (res.data.success) {

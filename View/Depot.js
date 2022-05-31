@@ -27,6 +27,9 @@ import { set } from "react-native-reanimated";
 const Depot = () => {
   const [isLoading, setLoading] = React.useState(false);
   const [show, setShow] = React.useState(true);
+  const [montant, setMontant] = React.useState(0);
+  const [id1xbet, setId1xbet] = React.useState(0);
+  const [visible, setVisible] = React.useState(false);
   const {
     control,
     handleSubmit,
@@ -34,6 +37,7 @@ const Depot = () => {
   } = useForm();
   const onSubmit = (data) => {
     console.log(data);
+    setVisible(true);
     setLoading(false);
   };
 
@@ -41,7 +45,7 @@ const Depot = () => {
     <NativeBaseProvider>
       <Center w="100%" h="70%">
         <Box safeArea p="2" w="90%" py="8">
-          <Modale />
+          <Modale montant={montant} id1xbet={id1xbet} visibility={visible} />
           <Heading
             size="lg"
             color="coolGray.800"
@@ -61,6 +65,9 @@ const Depot = () => {
                 render={({ field: { onChange, onBlur, value } }) => (
                   <Input
                     onChangeText={onChange}
+                    onChange={(e) => {
+                      setId1xbet(e.nativeEvent.text);
+                    }}
                     value={value}
                     placeholder="ID 1xbet"
                     onBlur={onBlur}
@@ -95,6 +102,7 @@ const Depot = () => {
                     onChangeText={onChange}
                     value={value}
                     placeholder="montant"
+                    onChange={(e) => setMontant(e.nativeEvent.text)}
                     onBlur={onBlur}
                     InputLeftElement={
                       <FontAwesome5
