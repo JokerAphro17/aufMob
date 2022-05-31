@@ -2,7 +2,7 @@ import React from "react";
 import Constants from "expo-constants";
 import { FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
-import { useForm, Controller, set } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { ToastAndroid } from "react-native";
 import Loader from "../components/Loader";
 import {

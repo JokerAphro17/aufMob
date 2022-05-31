@@ -24,6 +24,7 @@ import {
 } from "native-base";
 import Compte from "../View/Compte";
 import CouponJour from "../View/CouponJour";
+import Depot from "../View/Depot";
 const Drawer = createDrawerNavigator();
 function Component(props) {
   return (
@@ -163,7 +164,7 @@ function MyDrawer() {
         drawerContent={(props) => <CustomDrawerContent {...props} />}
       >
         <Drawer.Screen name="Mon Compte" component={Compte} />
-        <Drawer.Screen name="Depot" component={Component} />
+        <Drawer.Screen name="Depot" component={Depot} />
         <Drawer.Screen name="Retrait" component={Component} />
         <Drawer.Screen name="Coupon du jour" component={CouponJour} />
         <Drawer.Screen name="Comment ça marche ?" component={Component} />
