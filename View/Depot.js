@@ -33,6 +33,7 @@ const Depot = () => {
   const [montant, setMontant] = React.useState(0);
   const [id1xbet, setId1xbet] = React.useState(0);
   const [visible, setVisible] = React.useState(false);
+  const [systeme, setSysteme] = React.useState("");
   const {
     control,
     handleSubmit,
@@ -103,7 +104,7 @@ const Depot = () => {
                 }}
                 fontWeight="semibold"
               >
-                Depot Rapide sur votre compte 1xbet!!
+                Depot Rapide sur votre compte 1xbet!! {systeme}
               </Heading>
 
               <VStack space={3} mt="5">
@@ -144,6 +145,67 @@ const Depot = () => {
                     </Text>
                   )}
                 </FormControl>
+                <FormControl w="100%" isRequired>
+                  <Controller
+                    control={control}
+                    name="service"
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <Select
+                        minWidth="200"
+                        value={value}
+                        name="service"
+                        placeholder="service de payement"
+                        onBlur={onBlur}
+                        onValueChange={(value) => {
+                          setSysteme(value);
+                          onChange(value);
+                        }}
+                        accessibilityLabel="Choose Service"
+                        _selectedItem={{
+                          bg: "teal.600",
+                          endIcon: <CheckIcon size={5} />,
+                        }}
+                        mt="1"
+                      >
+                        <Select.Item label="Orange Money" value="om" />
+                        <Select.Item label="USD Perfect Money" value="pm" />
+                        <Select.Item
+                          label="Bitcoin "
+                          value="btc"
+                          leftIcon={
+                            <FontAwesome5
+                              name="bitcoin"
+                              size={20}
+                              color="#FFA500"
+                            />
+                          }
+                        />
+                        <Select.Item
+                          label="Paypal"
+                          value="pp"
+                          leftIcon={
+                            <FontAwesome5
+                              name="paypal"
+                              size={20}
+                              color="#002c8b"
+                            />
+                          }
+                        />
+                      </Select>
+                    )}
+                    rules={{
+                      required: "Champs obligatoire",
+                    }}
+                    defaultValue=""
+                  />
+                  {errors.service && (
+                    <FormControl.ErrorMessage
+                      leftIcon={<WarningOutlineIcon size="xs" />}
+                    >
+                      {errors.service.message}
+                    </FormControl.ErrorMessage>
+                  )}
+                </FormControl>
                 <FormControl isRequired>
                   <Controller
                     control={control}
@@ -178,53 +240,6 @@ const Depot = () => {
                       {errors.montant.message}
                     </Text>
                   )}
-                </FormControl>
-                <FormControl w="100%" isRequired isInvalid>
-                  <FormControl.Label>Choose service</FormControl.Label>
-
-                  <Controller
-                    control={control}
-                    name="service"
-                    render={({ field: { onChange, onBlur, value } }) => (
-
-                  <Select
-                    minWidth="200"
-                    
-                    accessibilityLabel="Choose Service"
-                    placeholder="Choose Service"
-                    _selectedItem={{
-                      bg: "teal.600",
-                      endIcon: <CheckIcon size={5} />,
-                    }}
-                    mt="1"
-                  >
-                    <Select.Item label="Orange Money" value="om" />
-                    <Select.Item label="USD Perfect Money" value="pm" />
-                    <Select.Item
-                      label="Bitcoin "
-                      value="btc"
-                      leftIcon={
-                        <FontAwesome5
-                          name="bitcoin"
-                          size={20}
-                          color="#FFA500"
-                        />
-                      }}
-                    />
-                    <Select.Item
-                      label="Paypal"
-                      value="pp"
-                      leftIcon={
-                        <FontAwesome5 name="paypal" size={20} color="#002c8b" />
-                      }
-                    />
-                  </Select>
-                    )
-                  <FormControl.ErrorMessage
-                    leftIcon={<WarningOutlineIcon size="xs" />}
-                  >
-                    Please make a selection!
-                  </FormControl.ErrorMessage>
                 </FormControl>
 
                 <FormControl isRequired>
