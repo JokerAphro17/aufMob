@@ -3,6 +3,7 @@ import Constants from "expo-constants";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { useForm, Controller } from "react-hook-form";
 import Loader from "../components/Loader";
+import axios from "axios";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 import {
@@ -27,6 +28,10 @@ import {
   Alert,
 } from "native-base";
 import { set } from "react-native-reanimated";
+const { manifest } = Constants;
+
+const api = `http://${manifest.debuggerHost.split(":")[0]}:3000/api/depots`;
+
 const Depot = () => {
   const [isLoading, setLoading] = React.useState(false);
   const [show, setShow] = React.useState(true);
@@ -40,10 +45,10 @@ const Depot = () => {
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => {
-    console.log(data);
-    setVisible(true);
-    setLoading(false);
+    setVisible(!visible);
+    //reset data on form
   };
+
   const Modale = ({ montant, id1xbet, visibility }) => {
     return (
       <Modal isOpen={visible}>
@@ -70,8 +75,26 @@ const Depot = () => {
               </Button>
               <Button
                 onPress={() => {
-                  setVisible(false);
                   setLoading(true);
+                  const body = {
+                    montant: montant,
+                    id_1xbet: id1xbet,
+                    user_id: "1",
+                    service: systeme,
+                  };
+                  axios
+                    .post(api, body)
+                    .then((res) => {
+                      setLoading(false);
+                      setVisible(false);
+                      setMontant(0);
+                      setId1xbet(0);
+                      setSysteme("");
+                      console.log(res.data);
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
                 }}
               >
                 valider
@@ -85,8 +108,8 @@ const Depot = () => {
 
   return (
     <NativeBaseProvider>
-      {false ? (
-        <Spinner />
+      {isLoading ? (
+        <Loader />
       ) : (
         <KeyboardAwareScrollView>
           <Center w="100%" h="100%">
@@ -141,6 +164,11 @@ const Depot = () => {
                   />
                   {errors.id1xbet && (
                     <Text style={{ color: "red" }}>
+                      <FontAwesome5
+                        name="exclamation-triangle"
+                        size={20}
+                        color="#FFA500"
+                      />
                       {errors.id1xbet.message}
                     </Text>
                   )}
@@ -199,11 +227,14 @@ const Depot = () => {
                     defaultValue=""
                   />
                   {errors.service && (
-                    <FormControl.ErrorMessage
-                      leftIcon={<WarningOutlineIcon size="xs" />}
-                    >
+                    <Text style={{ color: "red" }}>
+                      <FontAwesome5
+                        name="exclamation-triangle"
+                        size={20}
+                        color="#FFA500"
+                      />
                       {errors.service.message}
-                    </FormControl.ErrorMessage>
+                    </Text>
                   )}
                 </FormControl>
                 <FormControl isRequired>
@@ -237,11 +268,15 @@ const Depot = () => {
                   />
                   {errors.montant && (
                     <Text style={{ color: "red" }}>
+                      <FontAwesome5
+                        name="exclamation-triangle"
+                        size={20}
+                        color="#FFA500"
+                      />
                       {errors.montant.message}
                     </Text>
                   )}
                 </FormControl>
-
                 <FormControl isRequired>
                   <Controller
                     control={control}
@@ -276,45 +311,19 @@ const Depot = () => {
                   />
                   {errors.numero && (
                     <Text style={{ color: "red" }}>
+                      <FontAwesome5
+                        name="exclamation-triangle"
+                        size={20}
+                        color="#FFA500"
+                      />
                       {errors.numero.message}
                     </Text>
                   )}
                 </FormControl>
-                <FormControl isRequired>
-                  <Controller
-                    control={control}
-                    name="otp"
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <Input
-                        type="number"
-                        onChangeText={onChange}
-                        value={value}
-                        onBlur={onBlur}
-                        InputLeftElement={
-                          <FontAwesome5
-                            name=""
-                            size={20}
-                            style={{ marginLeft: 20 }}
-                          />
-                        }
-                        placeholder="code OTP"
-                      />
-                    )}
-                    rules={{
-                      required: "Champs obligatoire",
-                      pattern: {
-                        value: /^[0-9]{6}$/i,
-                        message: "Code OTP incorrect",
-                      },
-                    }}
-                  />
-                  {errors.otp && (
-                    <Text style={{ color: "red" }}>{errors.otp.message}</Text>
-                  )}
-                </FormControl>
+
                 <Button
                   mt="2"
-                  colorScheme="teal"
+                  bg={systeme === "om" ? "orange.600" : "blue.700"}
                   onPress={handleSubmit(onSubmit)}
                 >
                   <Text>Depot</Text>
