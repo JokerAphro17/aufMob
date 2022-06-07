@@ -7,7 +7,7 @@ import Depot from "./View/Depot";
 
 const App = () => (
   <>
-    <Depot />
+    <MyStack />
   </>
 );
 
