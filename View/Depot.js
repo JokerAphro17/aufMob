@@ -15,7 +15,6 @@ import {
   WarningOutlineIcon,
   AspectRatio,
   Center,
-  Alert,
   VStack,
   Heading,
   HStack,
@@ -26,69 +25,12 @@ import {
   Input,
   Modal,
   Image,
+  Alert,
 } from "native-base";
 import { set } from "react-native-reanimated";
 const { manifest } = Constants;
 
 const api = `http://${manifest.debuggerHost.split(":")[0]}:3000/api/depots`;
-const Modale = ({
-  montant,
-  id1xbet,
-  systeme,
-  visibility,
-  setVisibility,
-  setLoad,
-}) => {
-  return (
-    <Modal isOpen={visibility}>
-      <Modal.Content w="70%">
-        <Modal.Header>
-          <Text textAlign={"center"}>Confirmation</Text>
-        </Modal.Header>
-        <Modal.Body>
-          <Text>
-            Vous allez deposer <Text fontWeight={"bold"}>{montant}</Text>Frcfa
-            sur le compte 1xbet <Text fontWeight={"bold"}>{id1xbet}</Text>
-          </Text>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button.Group space={2}>
-            <Button
-              variant="ghost"
-              colorScheme="blueGray"
-              onPress={() => {
-                setVisibility(false);
-              }}
-            >
-              annuler
-            </Button>
-            <Button
-              onPress={() => {
-                setLoad(true);
-                const body = {
-                  montant: montant,
-                  id_1xbet: id1xbet,
-                  user_id: "1",
-                  service: systeme,
-                };
-                axios
-                  .post(api, body)
-                  .then((res) => {
-                    console.log(res.data);
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  });
-              }}
-            >
-              valider
-            </Button>
-          </Button.Group>
-        </Modal.Footer>
-      </Modal.Content>
-    </Modal>
-  );
-};
 
 const Depot = () => {
   const [isLoading, setLoading] = React.useState(false);
@@ -107,17 +49,67 @@ const Depot = () => {
     setVisible(!visible);
   };
 
+  const Modale = ({ montant, id1xbet, visibility }) => {
+    return (
+      <Modal isOpen={visible}>
+        <Modal.Content w="70%">
+          <Modal.Header>
+            <Text textAlign={"center"}>Confirmation</Text>
+          </Modal.Header>
+          <Modal.Body>
+            <Text>
+              Vous allez deposer <Text fontWeight={"bold"}>{montant}</Text>Frcfa
+              sur le compte 1xbet <Text fontWeight={"bold"}>{id1xbet}</Text>
+            </Text>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button.Group space={2}>
+              <Button
+                variant="ghost"
+                colorScheme="blueGray"
+                onPress={() => {
+                  setVisible(false);
+                }}
+              >
+                annuler
+              </Button>
+              <Button
+                onPress={() => {
+                  setLoading(true);
+                  const body = {
+                    montant: montant,
+                    id_1xbet: id1xbet,
+                    user_id: "1",
+                    service: systeme,
+                  };
+                  axios
+                    .post(api, body)
+                    .then((res) => {
+                      setShowAlert(true);
+                      setLoading(false);
+                      setVisible(false);
+                      setMontant(0);
+                      setId1xbet(0);
+                      setSysteme("");
+                      console.log(res.data);
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
+                }}
+              >
+                valider
+              </Button>
+            </Button.Group>
+          </Modal.Footer>
+        </Modal.Content>
+      </Modal>
+    );
+  };
+
   return (
     <NativeBaseProvider>
       <Aler show={showAlert} setShow={setShowAlert} />
-      <Modal
-        visibility={visible}
-        setVisibility={setVisible}
-        montant={montant}
-        id1xbet={id1xbet}
-        systeme={systeme}
-        setLoad={setLoading}
-      />
       {isLoading ? (
         <Loader />
       ) : (

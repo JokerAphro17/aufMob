@@ -33,7 +33,7 @@ function Aler({ show, setShow }) {
                     color: "coolGray.800",
                   }}
                 >
-                  Please try again later!
+                  Depot effectuer avec success
                 </Text>
               </HStack>
               <IconButton
