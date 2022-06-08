@@ -33,7 +33,7 @@ function Aler({ show, setShow }) {
                     color: "coolGray.800",
                   }}
                 >
-                  Depot effectuer avec success
+                  Succès
                 </Text>
               </HStack>
               <IconButton
@@ -53,7 +53,7 @@ function Aler({ show, setShow }) {
                 },
               }}
             >
-              Your coupon could not be processed at this time.
+              Votre rechargement a été effectué avec succès.
             </Box>
           </VStack>
         </Alert>

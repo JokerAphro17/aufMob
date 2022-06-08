@@ -34,7 +34,6 @@ const api = `http://${manifest.debuggerHost.split(":")[0]}:3000/api/depots`;
 
 const Depot = () => {
   const [isLoading, setLoading] = React.useState(false);
-  const [show, setShow] = React.useState(true);
   const [montant, setMontant] = React.useState(0);
   const [id1xbet, setId1xbet] = React.useState(0);
   const [visible, setVisible] = React.useState(false);
@@ -88,8 +87,9 @@ const Depot = () => {
                       setShowAlert(true);
                       setLoading(false);
                       setVisible(false);
-                      setMontant(0);
-                      setId1xbet(0);
+                      setTimeout(() => {
+                        setShowAlert(false);
+                      }, 5000);
                       setSysteme("");
                       console.log(res.data);
                     })
@@ -279,6 +279,7 @@ const Depot = () => {
                     </Text>
                   )}
                 </FormControl>
+
                 <FormControl isRequired>
                   <Controller
                     control={control}
