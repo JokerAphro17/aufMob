@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import Constants from "expo-constants";
 import { FontAwesome } from "@expo/vector-icons";
 import axios from "axios";
@@ -32,6 +32,7 @@ const api = `http://${manifest.debuggerHost.split(":")[0]}:3000/api/login`;
 const Login = ({ navigation }) => {
   const [isLoading, setLoading] = React.useState(false);
   const [show, setShow] = React.useState(true);
+  const UserContext = React.createContext();
   const {
     control,
     handleSubmit,
@@ -71,6 +72,7 @@ const Login = ({ navigation }) => {
   } else {
     return (
       <NativeBaseProvider>
+        <UserContext.Provider value={{ show, setShow }}></UserContext.Provider>
         <Center w="100%" h="100%" bg="darkBlue.200">
           <HStack justifyContent="center">
             <Image source={require("../assets/img/logo.png")} alt="logo" />
