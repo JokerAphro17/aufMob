@@ -39,6 +39,7 @@ const Depot = () => {
   const [visible, setVisible] = React.useState(false);
   const [systeme, setSysteme] = React.useState("");
   const [showAlert, setShowAlert] = React.useState(false);
+
   const {
     control,
     handleSubmit,
@@ -92,6 +93,11 @@ const Depot = () => {
                         setShowAlert(false);
                       }, 5000);
                       setSysteme("");
+                      reset({
+                        montant: 0,
+                        id1xbet: 0,
+                        numero: 0,
+                      });
                       console.log(res.data);
                     })
                     .catch((err) => {
