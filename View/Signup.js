@@ -5,8 +5,7 @@ import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import { FontAwesome } from "@expo/vector-icons";
 import Constants from "expo-constants";
-const { manifest } = Constants;
-const api = `http://${manifest.debuggerHost.split(":")[0]}:3000/api/register`;
+import { UserContext } from "../App";
 import Loader from "../components/Loader";
 import {
   NativeBaseProvider,
@@ -23,14 +22,15 @@ import {
   Spinner,
   Text,
 } from "native-base";
-
-const shwoToast = (message) => {
+const { manifest } = Constants;
+const api = `http://${manifest.debuggerHost.split(":")[0]}:3000/api/register`;
+export const shwoToast = (message) => {
   ToastAndroid.show(message, ToastAndroid.SHORT);
 };
 
-// github api
 
 const Signup = ({ navigation }) => {
+  const User = React.useContext(UserContext);
   const [password, setPassword] = useState("");
   const [isLoading, setLoading] = useState(false);
   const {
@@ -43,16 +43,19 @@ const Signup = ({ navigation }) => {
       password: "",
     },
   });
+  const { manifest } = Constants;
+  const api = `http://${manifest.debuggerHost.split(":")[0]}:3000/api/signup`;
   const onSubmit = (data) => {
     setLoading(true);
     axios
-      .post("http://192.168.137.153:3000/api/register", data)
+      .post(api, data)
       .then((res) => {
         setLoading(false);
-        if (res.data.success) {
-          shwoToast(res.data.message);
-          navigation.navigate("Home");
-          console.log(res);
+        if (res.data?.success) {
+          shwoToast(res.data?.message);
+          console.log(User.user);
+          User.setUser(res.data?.info);
+          navigation.navigate("verifyEmail");
         } else {
           shwoToast(res.data.message);
         }
@@ -65,7 +68,7 @@ const Signup = ({ navigation }) => {
 
         console.log(err);
       });
-    console.log(data);
+    console.log(api);
   };
   if (isLoading) {
     return (
@@ -106,7 +109,7 @@ const Signup = ({ navigation }) => {
               <FormControl isRequired>
                 <Controller
                   control={control}
-                  name="name"
+                  name="lastname"
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Input
                       onChangeText={onChange}
@@ -127,8 +130,36 @@ const Signup = ({ navigation }) => {
                   }}
                   defaultValue=""
                 />
-                {errors.name && (
-                  <Text style={{ color: "red" }}>{errors.name.message}</Text>
+                {errors.lastname && (
+                  <Text style={{ color: "red" }}>{errors.lastname.message}</Text>
+                )}
+              </FormControl>
+              <FormControl isRequired>
+                <Controller
+                  control={control}
+                  name="firstname"
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
+                      onChangeText={onChange}
+                      value={value}
+                      placeholder="Prenom"
+                      onBlur={onBlur}
+                      InputLeftElement={
+                        <FontAwesome
+                          name="user"
+                          size={20}
+                          style={{ marginLeft: 20 }}
+                        />
+                      }
+                    />
+                  )}
+                  rules={{
+                    required: "Champs obligatoire",
+                  }}
+                  defaultValue=""
+                />
+                {errors.firstname && (
+                  <Text style={{ color: "red" }}>{errors.firstname.message}</Text>
                 )}
               </FormControl>
               <FormControl isRequired>
@@ -205,7 +236,7 @@ const Signup = ({ navigation }) => {
               <FormControl isRequired>
                 <Controller
                   control={control}
-                  name="c_password"
+                  name="password_confirmation"
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Input
                       type="password"
@@ -230,9 +261,9 @@ const Signup = ({ navigation }) => {
                       "Les mots de passe ne correspondent pas",
                   }}
                 />
-                {errors.c_password && (
+                {errors.password_confirmation && (
                   <Text style={{ color: "red" }}>
-                    {errors.c_password.message}
+                    {errors.password_confirmation.message}
                   </Text>
                 )}
               </FormControl>

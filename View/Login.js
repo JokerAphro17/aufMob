@@ -5,6 +5,7 @@ import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import { ToastAndroid } from "react-native";
 import Loader from "../components/Loader";
+import { UserContext } from "../App";
 import {
   NativeBaseProvider,
   Box,
@@ -27,12 +28,12 @@ const shwoToast = (message) => {
 };
 const { manifest } = Constants;
 
-const api = `http://${manifest.debuggerHost.split(":")[0]}:3000/api/login`;
+const api = `http://${manifest.debuggerHost.split(":")[0]}:3000/api/signin`;
 
 const Login = ({ navigation }) => {
+  const User = React.useContext(UserContext);
   const [isLoading, setLoading] = React.useState(false);
   const [show, setShow] = React.useState(true);
-  const UserContext = React.createContext();
   const {
     control,
     handleSubmit,
@@ -49,16 +50,27 @@ const Login = ({ navigation }) => {
       .post(api, data)
       .then((res) => {
         setLoading(false);
-        shwoToast(res.data.msg);
+        shwoToast(res.data.message);
         console.log(res.data);
-        if (res.data.statut === 1) {
-          navigation.navigate("Home");
-        }
+        User.setUser(res.data?.user);
+        navigation.navigate("Home");
+        
       })
       .catch((err) => {
         setLoading(false);
-        shwoToast("Connexion impossible");
-        console.log(err);
+        console.log(err.response.status);
+        shwoToast(err.response.data.message);
+        if (err.response.status === 403) {
+          axios.post(`http://${manifest.debuggerHost.split(":")[0]}:3000/api/email/resend`,{
+            email: data.email,
+          } ).then((res) => {
+            User.setUser(res.data?.info);
+            navigation.navigate("verifyEmail");
+          }).catch((err) => {
+            shwoToast(err.response.data.message);
+          } )
+
+        }
       });
     console.log(data);
     console.log(api);
@@ -107,7 +119,7 @@ const Login = ({ navigation }) => {
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Input
                       color={"white"}
-                      placeholder="Email"
+                      placeholder={"Email"}
                       onChangeText={onChange}
                       value={value}
                       onBlur={onBlur}

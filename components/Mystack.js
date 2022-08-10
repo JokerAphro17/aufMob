@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Login from "../View/Login";
 import Signup from "../View/Signup";
 import Drawer1 from "./Drawer1";
+import VerifyEmail from "../View/VerifyEmail";
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +35,22 @@ const MyStack = () => {
             headerTitleAlign: "center",
             headerBackVisible: false,
           }}
+        />
+        <Stack.Screen 
+          name="verifyEmail"
+          component={VerifyEmail}
+          options={
+            {
+              title: "Verification du mail",
+              headerLeft: () => null,
+            headerTitleStyle: {
+              fontWeight: "bold",
+              fontSize: 20,
+            },
+            headerTitleAlign: "center",
+            headerBackVisible: false,
+            }
+          }
         />
       </Stack.Navigator>
     </NavigationContainer>
