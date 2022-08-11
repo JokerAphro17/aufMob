@@ -133,7 +133,8 @@ const Login = ({ navigation }) => {
                     />
                   )}
                   name="email"
-                  rules={{ required: "Field is required" }}
+                  rules={{ required: "Field is required",
+                  pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i, message: "mail invalde" } }}
                   defaultValue=""
                 />
                 {errors.email && <Text>* Ce champs est obligatoire</Text>}

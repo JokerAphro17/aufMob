@@ -47,7 +47,7 @@ const VerifyEmail = ({ navigation }) => {
    
     data.email = User.user.email;
     axios.post(verifiedEmailUrl, data).then((res) => {
-   
+  
       shwoToast("Email vérifié connectez vous");
       navigation.navigate("Login");
   }).catch((err) => {
@@ -73,7 +73,7 @@ const VerifyEmail = ({ navigation }) => {
               fontWeight="semibold"
             >
               Code de Verification envoyé à votre adresse email
-              {code}
+              
             </Heading>
             
             <VStack space={3} mt="5">
