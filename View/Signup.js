@@ -5,7 +5,6 @@ import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import { FontAwesome } from "@expo/vector-icons";
 import Constants from "expo-constants";
-import { UserContext } from "../App";
 import Loader from "../components/Loader";
 import {
   NativeBaseProvider,
@@ -30,7 +29,6 @@ export const shwoToast = (message) => {
 
 
 const Signup = ({ navigation }) => {
-  const User = React.useContext(UserContext);
   const [password, setPassword] = useState("");
   const [isLoading, setLoading] = useState(false);
   const {

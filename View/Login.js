@@ -1,12 +1,11 @@
 import React, { useContext } from "react";
-import Constants from "expo-constants";
 import { FontAwesome } from "@expo/vector-icons";
-import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import { ToastAndroid } from "react-native";
+import {  signinUsers, sendActivateCodeAgaint } from "../api/request"
 import Loader from "../components/Loader";
-import { UserContext } from "../App";
-import {
+import useAuth from '../utilities/hook/useAuth';
+import { 
   NativeBaseProvider,
   Box,
   Spinner,
@@ -23,16 +22,13 @@ import {
   Image,
   Alert,
 } from "native-base";
-const shwoToast = (message) => {
+export const shwoToast = (message) => {
   ToastAndroid.show(message, ToastAndroid.SHORT);
 };
-const { manifest } = Constants;
-
-const api = `http://${manifest.debuggerHost.split(":")[0]}:3000/api/signin`;
 
 const Login = ({ navigation }) => {
-  const User = React.useContext(UserContext);
   const [isLoading, setLoading] = React.useState(false);
+  const auth = useAuth();
   const [show, setShow] = React.useState(true);
   const {
     control,
@@ -44,36 +40,50 @@ const Login = ({ navigation }) => {
       password: "",
     },
   });
-  const onSubmit = (data) => {
+  
+
+  const login = (data) => {
     setLoading(true);
-    axios
-      .post(api, data)
+    signinUsers(data)
       .then((res) => {
         setLoading(false);
-        shwoToast(res.data.message);
-        console.log(res.data);
-        User.setUser(res.data?.user);
-        navigation.navigate("Home");
-        
+        if (res.data?.success) {
+          shwoToast(res.data?.message);
+          auth.setUser(res.data?.data);
+          navigation.navigate("Home");
+        } else {
+          shwoToast(res.data.status);
+        }
       })
       .catch((err) => {
         setLoading(false);
-        console.log(err.response.status);
-        shwoToast(err.response.data.message);
-        if (err.response.status === 403) {
-          axios.post(`http://${manifest.debuggerHost.split(":")[0]}:3000/api/email/resend`,{
-            email: data.email,
-          } ).then((res) => {
-            User.setUser(res.data?.info);
-            navigation.navigate("verifyEmail");
-          }).catch((err) => {
-            shwoToast(err.response.data.message);
-          } )
+        if (err.status === 403) {
+          shwoToast(err.errors);
+          sendActivateCodeAgaint(data.email).then((res) => {
+            if (res.data?.success) {
+              shwoToast(res.data?.message);
+            } else {
+              shwoToast(res.data.message);
+            }
+          }
 
+          );
+        } else {
+          shwoToast("Erreur!! probleme de connexion");
         }
-      });
+        console.log(err);
+      }
+      );
+  };
+  
+  
+
+
+  const onSubmit = async (data) => {
+    
+    login(data);
     console.log(data);
-    console.log(api);
+
   };
   if (isLoading) {
     return (
@@ -84,7 +94,7 @@ const Login = ({ navigation }) => {
   } else {
     return (
       <NativeBaseProvider>
-        <UserContext.Provider value={{ show, setShow }}></UserContext.Provider>
+        
         <Center w="100%" h="100%" bg="darkBlue.200">
           <HStack justifyContent="center">
             <Image source={require("../assets/img/logo.png")} alt="logo" />

@@ -1,12 +1,10 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { ToastAndroid } from "react-native";
-import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import { FontAwesome } from "@expo/vector-icons";
 import Constants from "expo-constants";
 const { manifest } = Constants;
- import { UserContext } from "../App";
 const api = `http://${manifest.debuggerHost.split(":")[0]}:3000/api/register`;
 const verifiedEmailUrl = `http://${manifest.debuggerHost.split(":")[0]}:3000/api/email/verify`;
 
@@ -35,8 +33,6 @@ const shwoToast = (message) => {
 // github api
 
 const VerifyEmail = ({ navigation }) => {
-  const User = React.useContext(UserContext);
-  const code = User.user?.code_verified.toString()
   const {
     control,
     handleSubmit,
@@ -45,15 +41,15 @@ const VerifyEmail = ({ navigation }) => {
 
   const onSubmit = (data) => {
    
-    data.email = User.user.email;
-    axios.post(verifiedEmailUrl, data).then((res) => {
+    // data.email = User.user.email;
+    // axios.post(verifiedEmailUrl, data).then((res) => {
   
-      shwoToast("Email vérifié connectez vous");
-      navigation.navigate("Login");
-  }).catch((err) => {
+    //   shwoToast("Email vérifié connectez vous");
+    //   navigation.navigate("Login");
+  // }).catch((err) => {
     
-    shwoToast(err.response.data.message);
-  })
+  //   shwoToast(err.response.data.message);
+  // })
   }
  
     
@@ -102,7 +98,7 @@ const VerifyEmail = ({ navigation }) => {
                     // verified if equals to the code sent to the user
                     validate: (value) => {
                       console.log(value);
-                      if (value === code) {
+                      if (value ) {
                         return true;
                       } else {
                         return "Code incorrect";

@@ -7,16 +7,20 @@ import Depot from "./View/Depot";
 import VerifyEmail from "./View/VerifyEmail";
 import { useState } from "react";
 import Login from "./View/Login";
-export const UserContext = React.createContext({});
+import { AuthProvider } from "./utilities/context/authContext";
+import { RequestsProvider } from "./utilities/context/requestsContext";
 
 
 const App = () => {
 
-  const [user, setUser] = useState({});
+  
   return (
-  <UserContext.Provider value={{user, setUser}}>
-     <MyStack/> 
-  </UserContext.Provider>
+    <AuthProvider>
+      <RequestsProvider>
+        <MyStack/> 
+      </RequestsProvider>
+    </AuthProvider>
+
 );
   }
 export default App;
