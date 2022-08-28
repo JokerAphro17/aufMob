@@ -6,18 +6,14 @@ import { USER_SESSION } from "../constant/app.constant";
 const AuthContext = createContext(null);
 
 const AuthProvider = ({ children }) => {
-    const userData = HANDLER_STORAGE.GET(USER_SESSION, 'object');
-    const [user, setUser] = useState(userData?.data ?? null);
-
-    const signin = (newUser, callback) => {
+    const [user, setUser] = useState(null);
+    const  signin =  async (newUser, callback) => {
         setUser(newUser);
-        HANDLER_STORAGE.SET(USER_SESSION, newUser, 'object')
         callback();
     };
 
     const signout = (callback) => {
         setUser(null);
-        HANDLER_STORAGE.REMOVE(USER_SESSION);
         callback();
     };
 

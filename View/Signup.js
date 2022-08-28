@@ -1,10 +1,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { ToastAndroid } from "react-native";
-import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import { FontAwesome } from "@expo/vector-icons";
-import Constants from "expo-constants";
+import { signupUsers } from "../api/request";
 import Loader from "../components/Loader";
 import {
   NativeBaseProvider,
@@ -21,8 +20,7 @@ import {
   Spinner,
   Text,
 } from "native-base";
-const { manifest } = Constants;
-const api = `http://${manifest.debuggerHost.split(":")[0]}:3000/api/register`;
+
 export const shwoToast = (message) => {
   ToastAndroid.show(message, ToastAndroid.SHORT);
 };
@@ -41,32 +39,28 @@ const Signup = ({ navigation }) => {
       password: "",
     },
   });
-  const { manifest } = Constants;
-  const api = `http://${manifest.debuggerHost.split(":")[0]}:3000/api/signup`;
-  const onSubmit = (data) => {
+ 
+  const signup = (data) => {
     setLoading(true);
-    axios
-      .post(api, data)
-      .then((res) => {
+    signupUsers(data).then((res) => {
         setLoading(false);
-        if (res.data?.success) {
-          shwoToast(res.data?.message);
-          console.log(User.user);
-          User.setUser(res.data?.info);
-          navigation.navigate("verifyEmail");
-        } else {
-          shwoToast(res.data.message);
-        }
-      })
-      .catch((err) => {
-        setLoading(false);
+        shwoToast(res.data?.message);
+        code = res.data?.data?.code_verified;
+        navigation.navigate("verifyEmail", { email: data.email , code: code});
+        shwoToast(res.data.message);
+      }
+    ).catch((err) => {
+      setLoading(false);
+      shwoToast(err.message);
+    });
+  }
 
-        // show a toast
-        shwoToast("Erreur!! probleme de connexion");
+    
+    
 
-        console.log(err);
-      });
-    console.log(api);
+
+  const onSubmit = (data) => {
+   signup(data);
   };
   if (isLoading) {
     return (

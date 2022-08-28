@@ -1,140 +1,50 @@
-import * as React from "react";
-import { useState, useEffect } from "react";
-import axios from "axios";
-import {
-  Text,
-  Box,
-  Center,
-  FormControl,
-  Spinner,
-  Heading,
-  HStack,
-  NativeBaseProvider,
-  VStack,
-  Button,
-  Input,
-} from "native-base";
-import { useForm, Controller } from "react-hook-form";
+import React from 'react';
+import { VStack, Box,Text, Center, Input } from 'native-base';
+import CreditCardDisplay from 'react-native-credit-card-display';
+import Swiper from 'react-native-swiper';
 
-const Loader = () => {
-  return (
-    <HStack space={2} justifyContent="center">
-      <Spinner accessibilityLabel="Loading posts" />
-      <Heading color="primary.500" fontSize="md">
-        Loading
-      </Heading>
-    </HStack>
-  );
-};
+const Compte =({navigation}) => {
 
-const Test = ({ params }) => {
-  const [show, setShow] = React.useState(true);
+    const [card, setCard] = React.useState({
+        cardNumber: '',
+        expirationDate: '',
+        cvv: '',
+        cardHolderName: '',
+    });
+    const [ flip, setFlip ] = React.useState(false);
+    
 
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      nom: "",
-      prenom: "",
-      email: "",
-      telephone: "",
-      date_naissance: "",
-    },
-  });
-  const onSubmit = (data) => {
-    return console.log(data);
-  };
-  return (
-    <NativeBaseProvider>
-      <Center>
-        <VStack space={2} mt="3" h="85%">
-          <FormControl w="80" mb="4">
-            <Controller
-              control={control}
-              name="nom"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <Input
-                  color={"white"}
-                  placeholder="Nom"
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  value={value}
-                />
-              )}
-            />
-          </FormControl>
+    return (
+        <VStack>
+            <Box width={'100%'}>
+                <Center >
+                <CreditCardDisplay
+                    number={4242424242424242}
+                    cvc={123}
+                    expiration="04/21"
+                    name="John J. Doe"
+                    fontSize={20}
+                    flipped={flip}
 
-          <FormControl w="80" mb="4">
-            <Controller
-              control={control}
-              name="prenom"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <Input
-                  color={"white"}
-                  placeholder="Prenom"
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  value={value}
+                    
+                    
                 />
-              )}
-              defaultValue=""
-            />
-          </FormControl>
-          <FormControl w="80" mb="4">
-            <Controller
-              control={control}
-              name="email"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <Input
-                  color={"white"}
-                  placeholder="Email"
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  value={value}
-                />
-              )}
-            />
-          </FormControl>
-          <FormControl w="80" mb="4">
-            <Controller
-              control={control}
-              name="telephone"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <Input
-                  color={"white"}
-                  placeholder="Telephone"
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  value={value}
-                />
-              )}
-            />
-          </FormControl>
-          <FormControl w="80" mb="4">
-            <Controller
-              control={control}
-              type="date"
-              name="date_naissance"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <Input
-                  color={"white"}
-                  placeholder="Date de naissance"
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                  value={value}
-                />
-              )}
-            />
-          </FormControl>
-          <Button colorScheme="indigo" onPress={handleSubmit(onSubmit)}>
-            Valider les modification
-          </Button>
+               
+                </Center>
+                <Center>
+                    <Swiper>
+                        <Box>
+                            <Input placeholder="Card Number" onChangeText={(text) => setCard({...card, cardNumber: text})} />
+                        </Box>
+                        <Box>
+                            <Input placeholder="Expiration Date" onChangeText={(text) => setCard({...card, expirationDate: text})} />
+                        </Box>
+                    </Swiper>
+                </Center>
+            </Box>
         </VStack>
-      </Center>
-    </NativeBaseProvider>
-  );
-};
+    );
+}
 
-export default Test;
+    export default Compte;
+

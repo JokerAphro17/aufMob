@@ -1,13 +1,12 @@
 // RequestsContext
 import React, { createContext, useState } from "react";
-import HANDLER_STORAGE from "../../data";
 import { REQUESTS } from "../constant/app.constant";
 
 const RequestsContext = createContext(null);
 
 const RequestsProvider = ({ children }) => {
     const [requests, setRequests] = useState(
-        HANDLER_STORAGE.GET(REQUESTS, "object")?.data ?? {}
+         {}
     );
     const isRequestPending = (requestName) => {
         if (

@@ -9,19 +9,7 @@ const HTTP_CLIENT = axios.create({
   timeout: 10000,
 });
 
-HTTP_CLIENT.interceptors.request.use(
-  config => {
-    const handlerData = HANDLER_STORAGE.GET(USER_SESSION, 'object');
-    const user = handlerData?.data ?? null;
-    if (user?.token) {
-        config.headers.authorization = `${TOKEN_TYPE} ${user?.token}`
-    }
-    return config;
-  },
-  error => {
-    return Promise.reject(error);
-  },
-);
+
 
 HTTP_CLIENT.interceptors.response.use(
   response => {
@@ -45,7 +33,8 @@ export const handlingErrors = error => {
     const status = error.response.status;
     if(dataResponse) {
         const errors = dataResponse?.error;
-        return { errors, status};
+        return { errors, status}; 
+
     }
     return message;
   } else if (error.request) {

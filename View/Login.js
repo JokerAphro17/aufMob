@@ -22,6 +22,8 @@ import {
   Image,
   Alert,
 } from "native-base";
+import { USER_SESSION } from "../utilities/constant/app.constant";
+import { API_URL } from './../utilities/constant/app.constant';
 export const shwoToast = (message) => {
   ToastAndroid.show(message, ToastAndroid.SHORT);
 };
@@ -41,37 +43,47 @@ const Login = ({ navigation }) => {
     },
   });
   
-
   const login = (data) => {
+    console.log(API_URL)
     setLoading(true);
+    console.log(data);
     signinUsers(data)
       .then((res) => {
         setLoading(false);
         if (res.data?.success) {
           shwoToast(res.data?.message);
-          auth.setUser(res.data?.data);
+          auth.signin(res.data?.data, () => {
+            console.log(auth.user);
           navigation.navigate("Home");
+          });
         } else {
-          shwoToast(res.data.status);
+          shwoToast(res.data?.message);
+          console.log(res.data?.message);
         }
       })
       .catch((err) => {
         setLoading(false);
-        if (err.status === 403) {
-          shwoToast(err.errors);
-          sendActivateCodeAgaint(data.email).then((res) => {
+        console.log(err);
+ 
+        if (err?.status === 403) {
+
+          sendActivateCodeAgaint({email:data.email}).then((res) => {
             if (res.data?.success) {
+              code = res.data?.data.code_verified;
               shwoToast(res.data?.message);
+              navigation.navigate("verifyEmail", {code});
             } else {
-              shwoToast(res.data.message);
+              shwoToast(res.data.error);
             }
           }
-
+          ).catch((err) => {
+            shwoToast(err?.errors);
+          }
           );
         } else {
-          shwoToast("Erreur!! probleme de connexion");
+          shwoToast(err?.errors);
         }
-        console.log(err);
+  
       }
       );
   };
@@ -79,10 +91,10 @@ const Login = ({ navigation }) => {
   
 
 
-  const onSubmit = async (data) => {
+  const onSubmit =  (data) => {
     
     login(data);
-    console.log(data);
+
 
   };
   if (isLoading) {

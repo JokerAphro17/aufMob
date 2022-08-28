@@ -1,5 +1,7 @@
 // requeste and dispatch to redux
 
+import HANDLER_STORAGE from "../data";
+import { USER_SESSION } from "../utilities/constant/app.constant";
 import HTTP_CLIENT, { handlingErrors } from "./client";
 
 const FILE_HEADERS = {
@@ -8,6 +10,7 @@ const FILE_HEADERS = {
 
 export const signinUsers = (params) =>
     new Promise((resolve, reject) => {
+        
         HTTP_CLIENT.post("signin", params)
             .then((response) => {
                 resolve(response);
@@ -127,13 +130,18 @@ export const updatedUserInfo = (uuid, params) =>
             });
     });
 
-export const fetchInfoUser = (uuid) =>
-    new Promise((resolve, reject) => {
-        HTTP_CLIENT.get(`users/${uuid}`)
+export const fetchInfoUser = (uuid, token) =>
+    new  Promise((resolve, reject) => {
+        HTTP_CLIENT.get(`users/${uuid}`,{
+            headers: {
+                Authorization: `Bearer ${token}`,
+            }
+        })
             .then((response) => {
                 resolve(response);
             })
             .catch((error) => {
+                
                 const message = handlingErrors(error);
                 reject(message);
             });

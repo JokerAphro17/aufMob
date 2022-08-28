@@ -3,10 +3,7 @@ import { useState, useEffect } from "react";
 import { ToastAndroid } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { FontAwesome } from "@expo/vector-icons";
-import Constants from "expo-constants";
-const { manifest } = Constants;
-const api = `http://${manifest.debuggerHost.split(":")[0]}:3000/api/register`;
-const verifiedEmailUrl = `http://${manifest.debuggerHost.split(":")[0]}:3000/api/email/verify`;
+import { activateAccount } from "../api/request";
 
 import Loader from "../components/Loader";
 
@@ -32,24 +29,24 @@ const shwoToast = (message) => {
 
 // github api
 
-const VerifyEmail = ({ navigation }) => {
+const VerifyEmail = ({route, navigation }) => {
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm();
-
+  const code = route.params?.code;
+  const email = route.params?.email;
   const onSubmit = (data) => {
-   
-    // data.email = User.user.email;
-    // axios.post(verifiedEmailUrl, data).then((res) => {
-  
-    //   shwoToast("Email vérifié connectez vous");
-    //   navigation.navigate("Login");
-  // }).catch((err) => {
-    
-  //   shwoToast(err.response.data.message);
-  // })
+  const dataToSend = { code: data.code, email: email };
+    activateAccount(dataToSend).then((res) => {
+      shwoToast(res.data?.message);
+      navigation.navigate("Login");
+    }
+    ).catch((err) => {
+      shwoToast(err.message);
+    }
+    );
   }
  
     
@@ -95,10 +92,10 @@ const VerifyEmail = ({ navigation }) => {
                     />
                   )}
                   rules={{
-                    // verified if equals to the code sent to the user
+                    required: "le champ est obligatoire",
                     validate: (value) => {
                       console.log(value);
-                      if (value ) {
+                      if (value ==code) {
                         return true;
                       } else {
                         return "Code incorrect";
