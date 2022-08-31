@@ -1,4 +1,6 @@
 import React from "react";
+import AwesomeAlert from "react-native-awesome-alerts";
+
 import {
   VStack,
   Box,
@@ -9,25 +11,26 @@ import {
   Stack,
   AspectRatio,
   Heading,
+  Button,
 } from "native-base";
 import CreditCardDisplay from "react-native-credit-card-display";
-
 import Swiper from "react-native-swiper";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-const Compte = ({ navigation }) => {
+const Card = ({ navigation }) => {
   const [card, setCard] = React.useState({
-    cardNumber: "",
-    expirationDate: "",
-    cvv: "",
-    cardHolderName: "",
+    cardNumber: " ",
+    expirationDate: " ",
+    cvv: " ",
+    cardHolderName: " ",
   });
   const [flip, setFlip] = React.useState(false);
+  const [visible, setVisible] = React.useState(false);
 
   return (
     <KeyboardAwareScrollView>
       <VStack>
-        <Box width={"100%"}>
+        <Box width={"100%"} mt={5}>
           <Center>
             <Box alignItems="center">
               <Box
@@ -104,7 +107,42 @@ const Compte = ({ navigation }) => {
                     alignItems="center"
                     space={4}
                     justifyContent="space-between"
-                  ></HStack>
+                  >
+                    <Button
+                      onPress={() => {
+                        setVisible(true);
+                      }}
+                      rounded="lg"
+                      size="lg"
+                      variant="solid"
+                      color="primary"
+                      shadowColor="coolGray.200"
+                      shadowOffset={{ width: 0, height: 2 }}
+                      shadowOpacity={0.8}
+                      shadowRadius={2}
+                      style={{ width: "100%" }}
+                    >
+                      <Text>Payer</Text>
+                    </Button>
+                    <AwesomeAlert
+                      show={visible}
+                      showProgress={false}
+                      title="Confirmer-vous le paiement?"
+                      closeOnTouchOutside={true}
+                      closeOnHardwareBackPress={false}
+                      showCancelButton={true}
+                      showConfirmButton={true}
+                      cancelText="Annuler"
+                      confirmText="Confirmer"
+                      confirmButtonColor="#DD6B55"
+                      onCancelPressed={() => {
+                        setVisible(false);
+                      }}
+                      onConfirmPressed={() => {
+                        setVisible(false);
+                      }}
+                    />
+                  </HStack>
                 </Stack>
               </Box>
             </Box>
@@ -115,4 +153,4 @@ const Compte = ({ navigation }) => {
   );
 };
 
-export default Compte;
+export default Card;

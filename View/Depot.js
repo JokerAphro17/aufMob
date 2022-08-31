@@ -28,17 +28,27 @@ import {
   Alert,
 } from "native-base";
 import { set } from "react-native-reanimated";
+import AwesomeAlert from "react-native-awesome-alerts";
 const { manifest } = Constants;
 
 const api = `http://${manifest.debuggerHost.split(":")[0]}:3000/api/depots`;
 
 const Depot = () => {
   const [isLoading, setLoading] = React.useState(false);
-  const [montant, setMontant] = React.useState(0);
-  const [id1xbet, setId1xbet] = React.useState(0);
-  const [visible, setVisible] = React.useState(false);
-  const [systeme, setSysteme] = React.useState("");
   const [showAlert, setShowAlert] = React.useState(false);
+  const [visible, setVisible] = React.useState(false);
+  const [errorConfirm, setErrorConfirm] = React.useState(false);
+  const initialRef = React.useRef(null);
+  const finalRef = React.useRef(null);
+  const [formData, setFormData] = React.useState({
+    devise_envoyee: "",
+    devise_recue: "",
+    montant_envoye: 0,
+    montant_recue: 0,
+    adress_sender: "",
+    adress_receiver: "",
+    adress_confirmation: "",
+  });
 
   const {
     control,
@@ -50,69 +60,75 @@ const Depot = () => {
     setVisible(!visible);
   };
 
-  const Modale = ({ montant, id1xbet, visibility }) => {
+  function Example() {
     return (
-      <Modal isOpen={visible}>
-        <Modal.Content w="70%">
-          <Modal.Header>
-            <Text textAlign={"center"}>Confirmation</Text>
-          </Modal.Header>
-          <Modal.Body>
-            <Text>
-              Vous allez deposer <Text fontWeight={"bold"}>{montant}</Text>Frcfa
-              sur le compte 1xbet <Text fontWeight={"bold"}>{id1xbet}</Text>
-            </Text>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button.Group space={2}>
-              <Button
-                variant="ghost"
-                colorScheme="blueGray"
-                onPress={() => {
-                  setVisible(false);
-                }}
-              >
-                annuler
-              </Button>
-              <Button
-                onPress={() => {
-                  setLoading(true);
-                  const body = {
-                    montant: montant,
-                    id_1xbet: id1xbet,
-                    user_id: "1",
-                    service: systeme,
-                  };
-                  axios
-                    .post(api, body)
-                    .then((res) => {
-                      setShowAlert(true);
-                      setLoading(false);
-                      setVisible(false);
-                      setTimeout(() => {
-                        setShowAlert(false);
-                      }, 5000);
-                      setSysteme("");
-                      reset({
-                        montant: 0,
-                        id1xbet: 0,
-                        numero: 0,
-                      });
-                      console.log(res.data);
-                    })
-                    .catch((err) => {
-                      console.log(err);
-                    });
-                }}
-              >
-                valider
-              </Button>
-            </Button.Group>
-          </Modal.Footer>
-        </Modal.Content>
-      </Modal>
+      <>
+        <Modal
+          isOpen={visible}
+          onClose={() => setVisible(false)}
+          initialFocusRef={initialRef}
+          finalFocusRef={finalRef}
+        >
+          <Modal.Content>
+            <Modal.CloseButton />
+            <Modal.Body>
+              <Heading textAlign="center">Confirmation</Heading>
+              <FormControl mt="3">
+                <FormControl.Label>
+                  Veuillez resaisir votre adress de confirmation
+                </FormControl.Label>
+                <Input
+                  ref={finalRef}
+                  onChangeText={(text) =>
+                    setFormData({ ...formData, adress_confirmation: text })
+                  }
+                />
+                {errorConfirm ? (
+                  <Text color="red.500">
+                    <WarningOutlineIcon
+                      style={{
+                        color: "red",
+                      }}
+                    />
+                    {""}
+                    Adress incorrect veuillez resaisir
+                  </Text>
+                ) : null}
+              </FormControl>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button.Group space={2}>
+                <Button
+                  variant="ghost"
+                  colorScheme="blueGray"
+                  onPress={() => {
+                    setModalVisible(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onPress={() => {
+                    if (
+                      formData.adress_confirmation !== formData.adress_receiver
+                    ) {
+                      setErrorConfirm(true);
+                      console.log(finalRef);
+                      return;
+                    }
+                    setErrorConfirm(false);
+                    setVisible(false);
+                  }}
+                >
+                  Suivant
+                </Button>
+              </Button.Group>
+            </Modal.Footer>
+          </Modal.Content>
+        </Modal>
+      </>
     );
-  };
+  }
 
   return (
     <NativeBaseProvider>
@@ -123,11 +139,6 @@ const Depot = () => {
         <KeyboardAwareScrollView>
           <Center w="100%" h="100%">
             <Box safeArea p="2" w="90%" py="8">
-              <Modale
-                montant={montant}
-                id1xbet={id1xbet}
-                visibility={visible}
-              />
               <Heading
                 size="lg"
                 color="coolGray.800"
@@ -136,75 +147,32 @@ const Depot = () => {
                 }}
                 fontWeight="semibold"
               >
-                Depot Rapide sur votre compte 1xbet!! {systeme}
+                Achter la crypto de votre choix
               </Heading>
 
               <VStack space={3} mt="5">
-                <FormControl isRequired>
-                  <Controller
-                    control={control}
-                    name="id1xbet"
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <Input
-                        onChangeText={onChange}
-                        onChange={(e) => {
-                          setId1xbet(e.nativeEvent.text);
-                        }}
-                        value={value}
-                        placeholder="ID 1xbet"
-                        onBlur={onBlur}
-                        InputLeftElement={
-                          <FontAwesome5
-                            name="user"
-                            size={20}
-                            style={{ marginLeft: 20 }}
-                          />
-                        }
-                      />
-                    )}
-                    rules={{
-                      required: "Champs obligatoire",
-                      pattern: {
-                        value: /^[0-9]{9}$/,
-                        message: "Veuillez entrer un numero 1xbet Valide",
-                      },
-                    }}
-                    defaultValue=""
-                  />
-                  {errors.id1xbet && (
-                    <Text style={{ color: "red" }}>
-                      <FontAwesome5
-                        name="exclamation-triangle"
-                        size={20}
-                        color="#FFA500"
-                      />
-                      {errors.id1xbet.message}
-                    </Text>
-                  )}
-                </FormControl>
                 <FormControl w="100%" isRequired>
                   <Controller
                     control={control}
-                    name="service"
+                    name="crypto"
                     render={({ field: { onChange, onBlur, value } }) => (
                       <Select
                         minWidth="200"
                         value={value}
-                        name="service"
-                        placeholder="service de payement"
+                        name="crypto"
+                        placeholder="selectionnez la crypto"
                         onBlur={onBlur}
                         onValueChange={(value) => {
-                          setSysteme(value);
+                          setFormData({ ...formData, devise_recue: value });
                           onChange(value);
                         }}
-                        accessibilityLabel="Choose Service"
+                        accessibilityLabel="Choisir la crypto"
                         _selectedItem={{
-                          bg: "teal.600",
+                          bg: "coolGray.100",
                           endIcon: <CheckIcon size={5} />,
                         }}
                         mt="1"
                       >
-                        <Select.Item label="Orange Money" value="om" />
                         <Select.Item label="USD Perfect Money" value="pm" />
                         <Select.Item
                           label="Bitcoin "
@@ -218,13 +186,24 @@ const Depot = () => {
                           }
                         />
                         <Select.Item
-                          label="Paypal"
-                          value="pp"
+                          label="Ethereum"
+                          value="eth"
                           leftIcon={
                             <FontAwesome5
-                              name="paypal"
+                              name="ethereum"
                               size={20}
                               color="#002c8b"
+                            />
+                          }
+                        />
+                        <Select.Item
+                          label=""
+                          value="ltc"
+                          leftIcon={
+                            <FontAwesome5
+                              name="coins"
+                              size={20}
+                              color="#FFA500"
                             />
                           }
                         />
@@ -235,17 +214,56 @@ const Depot = () => {
                     }}
                     defaultValue=""
                   />
-                  {errors.service && (
+                  {errors.crypto && (
                     <Text style={{ color: "red" }}>
                       <FontAwesome5
                         name="exclamation-triangle"
                         size={20}
                         color="#FFA500"
                       />
-                      {errors.service.message}
+                      {errors.crypto.message}
                     </Text>
                   )}
                 </FormControl>
+                <FormControl isRequired>
+                  <Controller
+                    control={control}
+                    name="adress"
+                    render={({ field: { onChange, onBlur, value } }) => (
+                      <Input
+                        onChangeText={onChange}
+                        onChange={(text) => {
+                          setFormData({ ...formData, adress_reciever: text });
+                        }}
+                        value={value}
+                        placeholder="Entrer votre adresse de reception"
+                        onBlur={onBlur}
+                        InputLeftElement={
+                          <FontAwesome5
+                            name="user"
+                            size={20}
+                            style={{ marginLeft: 20 }}
+                          />
+                        }
+                      />
+                    )}
+                    rules={{
+                      required: "Champs obligatoire",
+                    }}
+                    defaultValue=""
+                  />
+                  {errors.adress && (
+                    <Text style={{ color: "red" }}>
+                      <FontAwesome5
+                        name="exclamation-triangle"
+                        size={20}
+                        color="#FFA500"
+                      />
+                      {errors.adress.message}
+                    </Text>
+                  )}
+                </FormControl>
+
                 <FormControl isRequired>
                   <Controller
                     control={control}
@@ -254,8 +272,10 @@ const Depot = () => {
                       <Input
                         onChangeText={onChange}
                         value={value}
-                        placeholder="montant"
-                        onChange={(e) => setMontant(e.nativeEvent.text)}
+                        placeholder="Entrer le nombre de piece"
+                        onChange={(text) => {
+                          setFormData({ ...formData, montant_envoye: text });
+                        }}
                         onBlur={onBlur}
                         InputLeftElement={
                           <FontAwesome5
@@ -269,8 +289,8 @@ const Depot = () => {
                     rules={{
                       required: "Champs obligatoire",
                       pattern: {
-                        value: /^[0-9]{1,}$/,
-                        message: "Veuillez entrer un montant Valide",
+                        value: /^\d+(\.\d{1,2})?$/,
+                        message: "Veuillez entrer un nombre de piece vaide",
                       },
                     }}
                     defaultValue=""
@@ -287,59 +307,12 @@ const Depot = () => {
                   )}
                 </FormControl>
 
-                <FormControl isRequired>
-                  <Controller
-                    control={control}
-                    name="numero"
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <Input
-                        type="number"
-                        onChangeText={onChange}
-                        onChange={(e) => {
-                          onChange(e);
-                        }}
-                        value={value}
-                        onBlur={onBlur}
-                        InputLeftElement={
-                          <FontAwesome5
-                            name="wallet"
-                            size={20}
-                            style={{ marginLeft: 20 }}
-                          />
-                        }
-                        placeholder="Numero de Depot"
-                      />
-                    )}
-                    rules={{
-                      required: "Champs obligatoire",
-                      pattern: {
-                        value: /^[a-zA-Z0-9]{8}$/i,
-                        message: "Veuillez entrer un numero Valide",
-                      },
-                    }}
-                    defaultValue=""
-                  />
-                  {errors.numero && (
-                    <Text style={{ color: "red" }}>
-                      <FontAwesome5
-                        name="exclamation-triangle"
-                        size={20}
-                        color="#FFA500"
-                      />
-                      {errors.numero.message}
-                    </Text>
-                  )}
-                </FormControl>
-
-                <Button
-                  mt="2"
-                  bg={systeme === "om" ? "orange.600" : "blue.700"}
-                  onPress={handleSubmit(onSubmit)}
-                >
-                  <Text>Depot</Text>
+                <Button mt="2" bg={"blue.400"} onPress={handleSubmit(onSubmit)}>
+                  <Text>Suivant</Text>
                 </Button>
               </VStack>
             </Box>
+            <Example />
           </Center>
         </KeyboardAwareScrollView>
       )}

@@ -1,7 +1,6 @@
 import * as React from "react";
 import "react-native-gesture-handler";
 import "react-native-reanimated";
-import { NavigationContainer } from "@react-navigation/native";
 import {
   createDrawerNavigator,
   DrawerContentScrollView,
@@ -22,9 +21,11 @@ import {
   Divider,
   Icon,
 } from "native-base";
-import Compte from "../View/Compte";
+import Card from "../View/Card";
 import CouponJour from "../View/CouponJour";
 import Depot from "../View/Depot";
+import useAuth from "./../utilities/hook/useAuth";
+
 const Drawer = createDrawerNavigator();
 function Component(props) {
   return (
@@ -41,11 +42,7 @@ const whatsappUrl = "https://wa.me/";
 
 const getIcon = (screenName) => {
   switch (screenName) {
-    case "Mon Compte":
-      return "user";
-    case "Depot":
-      return "plus";
-    case "Retrait":
+    case "Achat de crypto":
       return "coins";
     case "Coupon du jour":
       return "receipt";
@@ -59,15 +56,16 @@ const getIcon = (screenName) => {
 };
 
 function CustomDrawerContent(props) {
+  const auth = useAuth();
   return (
     <DrawerContentScrollView {...props} safeArea>
       <VStack space="6" my="2" mx="1">
         <Box px="4">
           <Text bold color="gray.700">
-            Nom du client
+            {auth.user.lastname} {auth.user.firstname}
           </Text>
           <Text fontSize="14" mt="1" color="gray.500" fontWeight="500">
-            sonmail@xxx.com / 123456789
+            {auth.user.email} - {auth.user.telephone}
           </Text>
         </Box>
         <VStack divider={<Divider />} space="4">
@@ -163,9 +161,7 @@ function MyDrawer() {
       <Drawer.Navigator
         drawerContent={(props) => <CustomDrawerContent {...props} />}
       >
-        <Drawer.Screen name="Mon Compte" component={Compte} />
-        <Drawer.Screen name="Depot" component={Depot} />
-        <Drawer.Screen name="Retrait" component={Component} />
+        <Drawer.Screen name="Achat de crypto" component={Depot} />
         <Drawer.Screen name="Coupon du jour" component={CouponJour} />
         <Drawer.Screen name="Comment ça marche ?" component={Component} />
         <Drawer.Screen
