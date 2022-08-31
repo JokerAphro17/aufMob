@@ -31,8 +31,6 @@ import { set } from "react-native-reanimated";
 import AwesomeAlert from "react-native-awesome-alerts";
 const { manifest } = Constants;
 
-const api = `http://${manifest.debuggerHost.split(":")[0]}:3000/api/depots`;
-
 const Depot = () => {
   const [isLoading, setLoading] = React.useState(false);
   const [showAlert, setShowAlert] = React.useState(false);
@@ -59,76 +57,6 @@ const Depot = () => {
   const onSubmit = (data) => {
     setVisible(!visible);
   };
-
-  function Example() {
-    return (
-      <>
-        <Modal
-          isOpen={visible}
-          onClose={() => setVisible(false)}
-          initialFocusRef={initialRef}
-          finalFocusRef={finalRef}
-        >
-          <Modal.Content>
-            <Modal.CloseButton />
-            <Modal.Body>
-              <Heading textAlign="center">Confirmation</Heading>
-              <FormControl mt="3">
-                <FormControl.Label>
-                  Veuillez resaisir votre adress de confirmation
-                </FormControl.Label>
-                <Input
-                  ref={finalRef}
-                  onChangeText={(text) =>
-                    setFormData({ ...formData, adress_confirmation: text })
-                  }
-                />
-                {errorConfirm ? (
-                  <Text color="red.500">
-                    <WarningOutlineIcon
-                      style={{
-                        color: "red",
-                      }}
-                    />
-                    {""}
-                    Adress incorrect veuillez resaisir
-                  </Text>
-                ) : null}
-              </FormControl>
-            </Modal.Body>
-            <Modal.Footer>
-              <Button.Group space={2}>
-                <Button
-                  variant="ghost"
-                  colorScheme="blueGray"
-                  onPress={() => {
-                    setModalVisible(false);
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  onPress={() => {
-                    if (
-                      formData.adress_confirmation !== formData.adress_receiver
-                    ) {
-                      setErrorConfirm(true);
-                      console.log(finalRef);
-                      return;
-                    }
-                    setErrorConfirm(false);
-                    setVisible(false);
-                  }}
-                >
-                  Suivant
-                </Button>
-              </Button.Group>
-            </Modal.Footer>
-          </Modal.Content>
-        </Modal>
-      </>
-    );
-  }
 
   return (
     <NativeBaseProvider>
@@ -231,9 +159,9 @@ const Depot = () => {
                     name="adress"
                     render={({ field: { onChange, onBlur, value } }) => (
                       <Input
-                        onChangeText={onChange}
-                        onChange={(text) => {
-                          setFormData({ ...formData, adress_reciever: text });
+                        onChangeText={(text) => {
+                          setFormData({ ...formData, adress_receiver: text });
+                          onChange(text);
                         }}
                         value={value}
                         placeholder="Entrer votre adresse de reception"
@@ -312,7 +240,53 @@ const Depot = () => {
                 </Button>
               </VStack>
             </Box>
-            <Example />
+            <AwesomeAlert
+              show={visible}
+              showProgress={false}
+              closeOnTouchOutside={true}
+              closeOnHardwareBackPress={false}
+              showCancelButton={true}
+              showConfirmButton={true}
+              customView={
+                <Box>
+                  <Heading size="lg" color="coolGray.800" fontWeight="semibold">
+                    Confirmer l'adresse de reception
+                  </Heading>
+                  <Input
+                    value={formData.adress_confirmation}
+                    onChangeText={(text) => {
+                      setFormData({ ...formData, adress_confirmation: text });
+                    }}
+                    placeholder="Entrer l'adresse de reception"
+                  />
+                  {errorConfirm && (
+                    <Text style={{ color: "red" }}>
+                      <FontAwesome5
+                        name="exclamation-triangle"
+                        size={20}
+                        color="#FFA500"
+                      />
+                      Adress non compatible
+                    </Text>
+                  )}
+                </Box>
+              }
+              cancelText="Annuler"
+              confirmText="Confirmer"
+              confirmButtonColor="#DD6B55"
+              onCancelPressed={() => {
+                setVisible(false);
+              }}
+              onConfirmPressed={() => {
+                console.log(formData.adress_receiver);
+                if (formData.adress_confirmation === formData.adress_receiver) {
+                  setVisible(false);
+
+                  return;
+                }
+                setErrorConfirm(true);
+              }}
+            />
           </Center>
         </KeyboardAwareScrollView>
       )}
