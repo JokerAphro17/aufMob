@@ -16,16 +16,40 @@ import {
 import CreditCardDisplay from "react-native-credit-card-display";
 import Swiper from "react-native-swiper";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { payment } from "../api/request";
+import useAuth from "./../utilities/hook/useAuth";
 
-const Card = ({ navigation }) => {
+const Card = ({ navigation, route }) => {
   const [card, setCard] = React.useState({
-    cardNumber: " ",
-    expirationDate: " ",
-    cvv: " ",
-    cardHolderName: " ",
+    cardNumber: null,
+    expirationDate: null,
+    cvv: null,
+    cardHolderName: null,
   });
   const [flip, setFlip] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const { data } = route.params;
+  const montant = parseInt(data.montant_recu) * 3784;
+  const auth = useAuth();
+  const token = auth?.token;
+  data.adress_sender = card.cardNumber;
+  data.devise_envoyee = "xof";
+  data.montant_recu = montant;
+
+  const handleSubmit = async (data) => {
+    try {
+      setIsLoading(true);
+      const response = await payment(data, token);
+      if (response?.data?.success) {
+        setVisible(true);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+  };
 
   return (
     <KeyboardAwareScrollView>
@@ -56,10 +80,10 @@ const Card = ({ navigation }) => {
                     <Box width={"100%"}>
                       <Center>
                         <CreditCardDisplay
-                          number={`${card.cardNumber}`}
-                          cvc={`${card.cvv}`}
-                          expiration={`${card.expirationDate}`}
-                          name={`${card.cardHolderName}`}
+                          number={card.cardNumber || "0000 0000 0000 0000"}
+                          cvc={card.cvv || "000"}
+                          expiration={card.expirationDate}
+                          name={card.cardHolderName}
                           fontSize={20}
                           flipped={flip}
                           width={300}
@@ -138,9 +162,16 @@ const Card = ({ navigation }) => {
                       onCancelPressed={() => {
                         setVisible(false);
                       }}
-                      onConfirmPressed={() => {
-                        setVisible(false);
-                      }}
+                      onConfirmPressed={() => handleSubmit(data)}
+                    />
+                    <AwesomeAlert
+                      show={isLoading}
+                      showProgress={true}
+                      title="Paiement en cours"
+                      closeOnTouchOutside={false}
+                      closeOnHardwareBackPress={false}
+                      showCancelButton={false}
+                      showConfirmButton={false}
                     />
                   </HStack>
                 </Stack>

@@ -4,6 +4,7 @@ import { FontAwesome5 } from "@expo/vector-icons";
 import { useForm, Controller } from "react-hook-form";
 import Loader from "../components/Loader";
 import axios from "axios";
+import { useNavigation } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Aler from "../components/Aler";
 import {
@@ -36,13 +37,12 @@ const Depot = () => {
   const [showAlert, setShowAlert] = React.useState(false);
   const [visible, setVisible] = React.useState(false);
   const [errorConfirm, setErrorConfirm] = React.useState(false);
-  const initialRef = React.useRef(null);
-  const finalRef = React.useRef(null);
+  const navigation = useNavigation();
   const [formData, setFormData] = React.useState({
     devise_envoyee: "",
     devise_recue: "",
-    montant_envoye: 0,
-    montant_recue: 0,
+    montant_envoye: "",
+    montant_recu: "",
     adress_sender: "",
     adress_receiver: "",
     adress_confirmation: "",
@@ -91,7 +91,7 @@ const Depot = () => {
                         placeholder="selectionnez la crypto"
                         onBlur={onBlur}
                         onValueChange={(value) => {
-                          setFormData({ ...formData, devise_recue: value });
+                          setFormData({ ...formData, devise_recu: value });
                           onChange(value);
                         }}
                         accessibilityLabel="Choisir la crypto"
@@ -125,7 +125,7 @@ const Depot = () => {
                           }
                         />
                         <Select.Item
-                          label=""
+                          label="Litecoin"
                           value="ltc"
                           leftIcon={
                             <FontAwesome5
@@ -198,11 +198,11 @@ const Depot = () => {
                     name="montant"
                     render={({ field: { onChange, onBlur, value } }) => (
                       <Input
-                        onChangeText={onChange}
                         value={value}
                         placeholder="Entrer le nombre de piece"
-                        onChange={(text) => {
-                          setFormData({ ...formData, montant_envoye: text });
+                        onChangeText={(text) => {
+                          setFormData({ ...formData, montant_recue: text });
+                          onChange(text);
                         }}
                         onBlur={onBlur}
                         InputLeftElement={
@@ -281,7 +281,7 @@ const Depot = () => {
                 console.log(formData.adress_receiver);
                 if (formData.adress_confirmation === formData.adress_receiver) {
                   setVisible(false);
-
+                  navigation.navigate("Card", { data: formData });
                   return;
                 }
                 setErrorConfirm(true);

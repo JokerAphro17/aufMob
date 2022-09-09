@@ -5,6 +5,7 @@ import Login from "../View/Login";
 import Signup from "../View/Signup";
 import Drawer1 from "./Drawer1";
 import VerifyEmail from "../View/VerifyEmail";
+import Card from "../View/Card";
 
 const Stack = createNativeStackNavigator();
 
@@ -36,21 +37,32 @@ const MyStack = () => {
             headerBackVisible: false,
           }}
         />
-        <Stack.Screen 
+        <Stack.Screen
           name="verifyEmail"
           component={VerifyEmail}
-          options={
-            {
-              title: "Verification du mail",
-              headerLeft: () => null,
+          options={{
+            title: "Verification du mail",
+            headerLeft: () => null,
             headerTitleStyle: {
               fontWeight: "bold",
               fontSize: 20,
             },
             headerTitleAlign: "center",
             headerBackVisible: false,
-            }
-          }
+          }}
+        />
+        <Stack.Screen
+          name="Card"
+          component={Card}
+          option={{
+            title: "Paiement par carte",
+            headerTitleStyle: {
+              fontWeight: "bold",
+              fontSize: 20,
+            },
+            headerTitleAlign: "center",
+            haaderBackVisible: false,
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>

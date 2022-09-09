@@ -168,4 +168,18 @@ export const updatedAccountInfo = (params) =>
       });
   });
 
+export const payment = (params, token) =>
+  new Promise((resolve, reject) => {
+    HTTP_CLIENT.post("payment/crypto", params, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        const message = handlingErrors(error);
+        reject(message);
+      });
+  });
+
 //
