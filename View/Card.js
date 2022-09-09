@@ -12,6 +12,7 @@ import {
   AspectRatio,
   Heading,
   Button,
+  Spinner,
 } from "native-base";
 import CreditCardDisplay from "react-native-credit-card-display";
 import Swiper from "react-native-swiper";
@@ -32,20 +33,22 @@ const Card = ({ navigation, route }) => {
   const { data } = route.params;
   const montant = parseInt(data.montant_recu) * 3784;
   const auth = useAuth();
-  const token = auth?.token;
+  const token = auth?.user?.token;
   data.adress_sender = card.cardNumber;
   data.devise_envoyee = "xof";
-  data.montant_recu = montant;
+  data.montant_envoye = montant;
 
   const handleSubmit = async (data) => {
     try {
       setIsLoading(true);
+      console.log(data);
       const response = await payment(data, token);
       if (response?.data?.success) {
-        setVisible(true);
+        setVisible(false);
       }
       setIsLoading(false);
     } catch (error) {
+      console.log(token);
       console.log(error);
       setIsLoading(false);
     }
@@ -80,7 +83,7 @@ const Card = ({ navigation, route }) => {
                     <Box width={"100%"}>
                       <Center>
                         <CreditCardDisplay
-                          number={card.cardNumber || "0000 0000 0000 0000"}
+                          number={card.cardNumber}
                           cvc={card.cvv || "000"}
                           expiration={card.expirationDate}
                           name={card.cardHolderName}
@@ -166,11 +169,18 @@ const Card = ({ navigation, route }) => {
                     />
                     <AwesomeAlert
                       show={isLoading}
-                      showProgress={true}
+                      showProgress={false}
                       title="Paiement en cours"
                       closeOnTouchOutside={false}
                       closeOnHardwareBackPress={false}
                       showCancelButton={false}
+                      customView={
+                        <Spinner
+                          color="blue.500"
+                          size="lg"
+                          accessibilityLabel="Loading posts"
+                        />
+                      }
                       showConfirmButton={false}
                     />
                   </HStack>

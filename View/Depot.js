@@ -91,7 +91,7 @@ const Depot = () => {
                         placeholder="selectionnez la crypto"
                         onBlur={onBlur}
                         onValueChange={(value) => {
-                          setFormData({ ...formData, devise_recu: value });
+                          setFormData({ ...formData, devise_recue: value });
                           onChange(value);
                         }}
                         accessibilityLabel="Choisir la crypto"
@@ -201,7 +201,7 @@ const Depot = () => {
                         value={value}
                         placeholder="Entrer le nombre de piece"
                         onChangeText={(text) => {
-                          setFormData({ ...formData, montant_recue: text });
+                          setFormData({ ...formData, montant_recu: text });
                           onChange(text);
                         }}
                         onBlur={onBlur}
